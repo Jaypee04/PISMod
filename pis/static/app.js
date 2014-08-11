@@ -53,6 +53,46 @@ Ext.define('Wizard', {
 				'cReference', 'Address', 'cNumber'
 			]
 		});
+		//model for Civil Service Eligibility
+		 Ext.define('CSEligibility', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{ header: 'CseCareer'},
+				{ header: 'CseRating'},
+				{ header: 'CseDate'},
+				{ header: 'CsePlace'},
+				{ header: 'CseNumber' },
+				{ header: 'CseDor' }
+			]
+		}); 
+		//model for Work Experience
+		 Ext.define('WorkExp', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{ header: 'workExFrom' },
+				{ header: 'workExTo' },
+				{ header: 'workExPosition'},
+				{ header: 'workExDep' },
+				{ header: 'workExMnth'},
+				{ header: 'workExSal' },
+				{ header: 'workExMnth' },
+				{ header: 'workExGovt'} 
+	
+			]
+		}); 
+		//Voluntary Work 
+		Ext.define('VwWork', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{ header: 'VwName' },
+				{ header: 'VwFrom' },
+				{ header: 'VwTo'},
+				{ header: 'VwNumbers' },
+				{ header: 'VwPosition'}
+				
+			]
+		}); 
+		
 		//this.buttons = this.createNavButtons();
 		this.callParent(arguments);
 
@@ -87,58 +127,14 @@ Ext.define('Wizard', {
 		{
 			title: 'Personal Information',
 			items: [
-				{
-					xtype: 'panel',
-					title: 'Employee Picture',
-					layout: 'anchor',
-					collapsible: true,
-					collapsed: false,
-					bodyPadding: '20 20 20 20',
-					margin: '20 40 20 20',
-					defaults: {
-						width: '100%'
-					},
-					items:[
-						{
-							xtype: 'fieldcontainer',
-							layout: 'hbox',
-							items: [
-								{
-									xtype: 'fileuploadfield',
-									id: 'filedata',
-									margin:5,
-									emptyText: 'Select an image to upload...',
-									fieldLabel: 'File Path',
-									width:380,
-									buttonText: 'Browse'
-								},
-								{
-									xtype:"image",
-									height: 200,
-									width: 200,
-									style: {
-										"background-position": "0 0"
-									},
-									src: 'http://placehold.it/200x200'
-								}
-								
-							]
-						},
-						{
-							xtype:'button',
-							text:'Upload',
-							width:385
-						}
-						
-					]
-				},
+				
 				// EMPLOYEE DETAILS
 				{
 					xtype: 'panel',
 					title: 'Employee details',
 					layout: 'anchor',
 					collapsible: true,
-					collapsed: true,
+					collapsed: false,
 					bodyPadding: '20 20 20 20',
 					margin: '20 40 20 20',
 					defaults: {
@@ -268,7 +264,51 @@ Ext.define('Wizard', {
 			
 					]
 				},
-			
+				{
+					xtype: 'panel',
+					title: 'Employee Picture',
+					layout: 'anchor',
+					collapsible: true,
+					collapsed: true,
+					bodyPadding: '20 20 20 20',
+					margin: '20 40 20 20',
+					defaults: {
+						width: '100%'
+					},
+					items:[
+						{
+							xtype: 'fieldcontainer',
+							layout: 'hbox',
+							items: [
+								{
+									xtype: 'fileuploadfield',
+									id: 'filedata',
+									margin:5,
+									emptyText: 'Select an image to upload...',
+									fieldLabel: 'File Path',
+									width:380,
+									buttonText: 'Browse'
+								},
+								{
+									xtype:"image",
+									height: 200,
+									width: 200,
+									style: {
+										"background-position": "0 0"
+									},
+									src: 'http://placehold.it/200x200'
+								}
+								
+							]
+						},
+						{
+							xtype:'button',
+							text:'Upload',
+							width:385
+						}
+						
+					]
+				},
 				// IDENTIFICATIONS
 				{
 					xtype: 'panel',
@@ -526,9 +566,9 @@ Ext.define('Wizard', {
 					    }
 					},
 					columns: [
-				        { header: '<center>NAME OF CHILD</center>',  dataIndex: 'name', editor: 'textfield', flex: 2},
+				        { header: '<center>Name Of Child</center>',  dataIndex: 'name', editor: 'textfield', flex: 2},
 				        { xtype: 'datecolumn', 
-							header: '<center>DATE OF BIRTH</center>', 
+							header: '<center>Date Of Birth</center>', 
 							dataIndex: 'dob', 
 							width: 135,
 							editor: {
@@ -675,13 +715,13 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>NAME OF SCHOOL<br>(Write in Full)</center>', dataIndex: 'NameofSchool', editor: 'textfield', flex:2 },
-						{ header: '<center>DEGREE/COURSE<br>(Write in Full)</center>', dataIndex: 'DegreeCourse', editor: 'textfield', flex:1.3 },
-						{ header: '<center>YEAR GRADUATED<br>(if graduated)</center>', dataIndex: 'YearGraduated', editor: 'textfield', flex:1.3 },
-						{ header: '<center>HIGHEST GRADE/<br>LEVEL/<br>UNITS EARNED<br>(Write in Full)</center>', dataIndex: 'HighestGrade', editor: 'textfield', flex:1.3 },
-						{ header: '<center>FROM</center>', dataIndex: 'FromDate', editor: 'textfield',flex:.5 },
-						{ header: '<center>TO</center>', dataIndex: 'ToDate', editor: 'textfield', flex:.5 },
-						{ header: '<center>SCHOLARSHIP/<br>ACADEMIC HONORS<br>RECEIVED</center>', dataIndex: 'Scholarship', editor: 'textfield', flex:1.5 }
+						{ header: '<center>Name Of School<br>(Write in Full)</center>', dataIndex: 'NameofSchool', editor: 'textfield', flex:2 },
+						{ header: '<center>Degree/Course<br>(Write in Full)</center>', dataIndex: 'DegreeCourse', editor: 'textfield', flex:1.3 },
+						{ header: '<center>Year Graduated<br>(if graduated)</center>', dataIndex: 'YearGraduated', editor: 'textfield', flex:1.3 },
+						{ header: '<center>Highest Grade/<br>Level/<br>Units Earned<br>(Write in Full)</center>', dataIndex: 'HighestGrade', editor: 'textfield', flex:1.3 },
+						{ header: '<center>From</center>', dataIndex: 'FromDate', editor: 'textfield',flex:.5 },
+						{ header: '<center>To</center>', dataIndex: 'ToDate', editor: 'textfield', flex:.5 },
+						{ header: '<center>Scholarship/<br>Academic Honors<br>Received</center>', dataIndex: 'Scholarship', editor: 'textfield', flex:1.5 }
 						
 					],
 					buttons: [
@@ -737,13 +777,371 @@ Ext.define('Wizard', {
 			]
 		},
 		{
-			title: 'Civil Service Eligibility'
+			title: 'Civil Service Eligibility',
+				items: [
+				
+				// CIVIL SERVICE
+				{
+					autoScroll:true,
+					xtype: 'grid',
+					//layout: 'fit',
+					collapsible: true,
+					//collapsed: true,
+					margin: '20 40 20 20',
+				    title: 'Civil Service Eligibility',
+					 store: {
+						xtype: 'store',
+					    fields:['CseCareer', 'CseRating', 'CseDate', 'CsePlace', 'CseNumber','CseDor'],
+					    data: { 
+							items: [
+								{'CseCareer': '', 'CseRating': '','CseDate': '','CsePlace': '','CseNumber': '','CseDor': ''},
+							]     
+					    },
+					    proxy: {
+					        type: 'memory',
+					        reader: {
+					            type: 'json',
+					            rootProperty: 'items'
+					        }
+					    }
+					}, 
+								
+					columns: [
+				        { 
+							header: '<center>CAREER SERVICE/RA 1080 (BOARD/BAR) <br> UNDER SPECIAL LAWS/CES/CSEE<\center>', 
+								autoScroll:true,
+								dataIndex: 'CseCareer', 
+								editor:'textfield',
+									flex: 2
+						},
+				        { 
+							header: '<center>RATING<\center>', 
+								dataIndex: 'CseRating', 
+								editor:'textfield',
+									flex: .6 
+						},
+				        {
+							header: '<center>DATE OF EXAMINATION<br>/CONFERMENT<\center>',
+								dataIndex: 'CseDate', 
+								editor:'textfield',	
+									flex: 1.2 
+										},
+						{
+							header: '<center>PLACE OF EXAMINATION<br>/CONFERMENT<\center>', 
+								dataIndex: 'CsePlace', 
+								editor:'textfield',
+									flex: 1.2 
+						},
+						{
+							header: '<center>NUMBER<\center>', 
+								dataIndex: 'CseNumber', 
+								editor:'textfield',	
+									flex: .5
+						},
+						{
+							header: '<center>DATE OF RELEASE<\center> ', 
+								dataIndex: 'CseDor', 
+								editor:'textfield',	
+									flex: 1 
+									//width: 60
+						},
+				    ],
+					
+					buttons: [
+						{
+							text: 'add',
+							handler: function() 
+							{	
+								var grid = this.up('grid');
+								var storeKo = grid.getStore();
+								var rowEdit = grid.getPlugin('rowEditingPlugin');
+								console.log(rowEdit);
+								// Create a model instance
+								var r = Ext.create('CSEligibility', {
+									TitleofSeminar: 'New Training',
+									TrainingFrom:'',
+									TrainingTo:'', 
+									NumberofHours:'',
+									ConductedBy:''
+									
+								}); 
+								
+								storeKo.add(r);
+								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
+							}
+						},
+						{
+							text: 'remove',
+							handler: function() 
+							{
+								var grid = this.up('grid');
+								var storeKo = grid.getStore();
+								var rowEdit = grid.getPlugin('rowEditingPlugin');
+								var sm = grid.getSelectionModel();
+								rowEdit.cancelEdit();
+								storeKo.remove(sm.getSelection());
+								if (storeKo.getCount() > 0) {
+									sm.select(0);
+								}
+							},
+							disabled: false
+						}
+					],
+					plugins: [
+						Ext.create('Ext.grid.plugin.RowEditing', {
+							pluginId: 'rowEditingPlugin',
+							clicksToMoveEditor: 1,
+							autoCancel: false
+						})
+					]
+				}
+			]
+			
 		},
-		{
-			title: 'Work Experience'
+				{
+			title: 'Work Experience',
+				items: [
+				
+				// work experience
+				{
+					xtype: 'grid',
+					collapsible: true,
+					//collapsed: true,
+					margin: '20 40 20 20',
+				    title: 'WORK EXPERIENCE(Include private employment. Start from your current work)',
+					store: {
+						xtype: 'store',
+					    fields:['workExFrom', 'workExTo', 'workExPosition','workExDep','workExMnth','workExSal','workExStat','workExGovt'],
+					    data: { 
+							items: [
+								{'workExFrom':'', 'workExTo':'', 'workExPosition':'','workExDep':'','workExMnth':'','workExSal':'','workExStat':'','workExGovt':''},
+								
+							]
+					        
+					    },
+					    proxy: {
+					        type: 'memory',
+					        reader: {
+					            type: 'json',
+					            rootProperty: 'items'
+					        }
+					    }
+					},
+					columns: [
+				        { 
+							text: '<center>From<br>(mm/dd/yyyy)<\center>', 
+								dataIndex: 'workExFrom', 
+								editor:'textfield',	
+									flex: .8
+						},
+				        { 
+							text: '<center>To<br>(mm/dd/yyyy)<\center>',
+								dataIndex: 'workExTo', 
+								editor:'textfield',	
+									flex: .8 
+						},
+				        {
+							text: '<center>POSITION<br>TITLE <br>(Write in full) <\center>', 
+								dataIndex: 'workExPosition', 
+								editor:'textfield',	
+									flex: .8 
+						},
+						{ 
+							text: '<center>DEPARTMENT/AGENCY<br>/OFFICE/COMPANY<\center>', 
+								dataIndex: 'workExDep', 
+								editor:'textfield',	
+									flex: 1.5 
+						},
+						{ 
+							text: '<center>MONTHLY<br>SALARY<\center>', 
+								dataIndex: 'workExMnth', 
+								editor:'textfield',	
+									flex: .8 
+						},
+						{ 
+							text: '<center>SALARY GRADE &<br>STEP INCREMENT<br>(Format 00-0)<\center>', 
+								dataIndex: 'workExSal', 
+								editor:'textfield',	
+									flex: 1.3 
+						},
+						{
+							text: '<center>STATUS <br>OF APPOINTMENT<\center>', 
+								dataIndex: 'workExStat', 
+								editor:'textfield',	
+									flex: 1.2 
+						},
+						{ 
+							text: '<center>GOVT SERVICE <br>(YES/NO)<\center>', 
+								dataIndex: 'workExGovt', 
+								editor:'textfield',	
+									flex: 1 
+						}
+				    ],
+					selType: 'rowmodel',
+					plugins: [
+						Ext.create('Ext.grid.plugin.RowEditing', {
+						clicksToEdit: 2
+						})
+					],
+					buttons: [
+						{
+							text: 'add',
+							handler: function() 
+							{	
+								var grid = this.up('grid');
+								var storeKo = grid.getStore();
+								var rowEdit = grid.getPlugin('rowEditingPlugin');
+								console.log(rowEdit);
+								// Create a model instance
+								var r = Ext.create('WorkExp', {
+									TitleofSeminar: 'New Training',
+									TrainingFrom:'',
+									TrainingTo:'', 
+									NumberofHours:'',
+									ConductedBy:''
+									
+								}); 
+								
+								storeKo.add(r);
+								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
+							}
+						},
+						{
+							text: 'remove',
+							handler: function() 
+							{
+								var grid = this.up('grid');
+								var storeKo = grid.getStore();
+								var rowEdit = grid.getPlugin('rowEditingPlugin');
+								var sm = grid.getSelectionModel();
+								rowEdit.cancelEdit();
+								storeKo.remove(sm.getSelection());
+								if (storeKo.getCount() > 0) {
+									sm.select(0);
+								}
+							},
+							disabled: false
+						}
+					],
+					plugins: [
+						Ext.create('Ext.grid.plugin.RowEditing', {
+							pluginId: 'rowEditingPlugin',
+							clicksToMoveEditor: 1,
+							autoCancel: false
+						})
+					]
+				}
+			]
 		},
-		{
-			title: 'Voluntary Work'
+			{
+			title: 'Voluntary Work',
+					items: [
+				
+				// Voluntary Work
+				{
+					xtype: 'grid',
+					collapsible: true,
+					//collapsed: true,
+					margin: '20 40 20 20',
+				    title: 'VOLUNTARY WORK OR INVOLVEMENT IN CIVIC / NON-GOVERNMENT/PEOPLE/VOLUNTARY ORGANIZATIONS',
+					store: {
+						xtype: 'store',
+					    fields:['VwName', 'VwFrom', 'VwTo', 'VwNumbers', 'VwPosition'],
+					    data: { 
+							items: [
+								{'VwName': '', 'VwFrom': '', 'VwTo': '', 'VwNumbers': '', 'VwPosition':' '}
+							]
+					        
+					    },
+					    proxy: {
+					        type: 'memory',
+					        reader: {
+					            type: 'json',
+					            rootProperty: 'items'
+					        }
+					    }
+					},
+					columns: [
+				        { text: '<center>NAME & ADDRESS OF ORGANIZATION<br>(Write in full)<\center>',
+							editor:'textfield',
+								dataIndex: 'VwName', 
+								flex: 1.5
+						},
+						{ 
+							text: '<center>From<br>(mm/dd/yyyy)<\center>', 
+								editor:'textfield',
+								dataIndex: 'VwFrom', 
+									flex: .7 
+									
+						},
+						{ 
+							text: '<center>To<br>(mm/dd/yyyy)<\center>', 
+								editor:'textfield',
+								dataIndex: 'VwTo', 
+									flex: .7 
+						},
+						{ 
+							text: '<center>NUMBERS OF HOURS<\center>', 
+								editor:'textfield',
+								dataIndex: 'VwNumbers', 
+									flex: 1 
+						},
+						{ 
+							text: '<center>POSITION / NATURE OF WORK<\center>', 
+								editor:'textfield',
+								dataIndex: 'VwPosition', 
+									flex: 1.5 
+									},
+					 ],
+					buttons: [
+						{
+							text: 'add',
+							handler: function() 
+							{	
+								var grid = this.up('grid');
+								var storeKo = grid.getStore();
+								var rowEdit = grid.getPlugin('rowEditingPlugin');
+								console.log(rowEdit);
+								// Create a model instance
+								var r = Ext.create('VwWork', {
+									TitleofSeminar: 'New Training',
+									TrainingFrom:'',
+									TrainingTo:'', 
+									NumberofHours:'',
+									ConductedBy:''
+									
+								}); 
+								
+								storeKo.add(r);
+								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
+							}
+						},
+						{
+							text: 'remove',
+							handler: function() 
+							{
+								var grid = this.up('grid');
+								var storeKo = grid.getStore();
+								var rowEdit = grid.getPlugin('rowEditingPlugin');
+								var sm = grid.getSelectionModel();
+								rowEdit.cancelEdit();
+								storeKo.remove(sm.getSelection());
+								if (storeKo.getCount() > 0) {
+									sm.select(0);
+								}
+							},
+							disabled: false
+						}
+					],
+					plugins: [
+						Ext.create('Ext.grid.plugin.RowEditing', {
+							pluginId: 'rowEditingPlugin',
+							clicksToMoveEditor: 1,
+							autoCancel: false
+						})
+					]
+				}
+			]
 		},
 		{
 			title: 'Training Programs',
@@ -771,11 +1169,11 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>TITLE OF SEMINAR/CONFERENCE/WORKSHOP/SHORT COURSES<br>(Write in Full)</center>', dataIndex: 'TitleofSeminar', editor: 'textfield', flex:1.7 },
+						{ header: '<center>Title of Seminar/Conference/Workshop/Short Courses<br>(Write in Full)</center>', dataIndex: 'TitleofSeminar', editor: 'textfield', flex:1.7 },
 						{ header: '<center>From</center>', dataIndex: 'TrainingFrom', editor: 'textfield', flex:.3 },
 						{ header: '<center>To</center>', dataIndex: 'TrainingTo', editor: 'textfield', flex:.3 },
-						{ header: '<center>NUMBER OF<br>HOURS</center>', dataIndex: 'NumberofHours', editor: 'textfield', flex:.4 },
-						{ header: '<center>CONDUCTED/SPONSORED BY<br>(Write in Full)</center>', dataIndex: 'ConductedBy', editor: 'textfield', flex:1 }
+						{ header: '<center>Number of<br>Hours</center>', dataIndex: 'NumberofHours', editor: 'textfield', flex:.4 },
+						{ header: '<center>Conducted/Sponsored By<br>(Write in Full)</center>', dataIndex: 'ConductedBy', editor: 'textfield', flex:1 }
 						
 					],
 					buttons: [
@@ -854,7 +1252,7 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>SPECIAL SKILLS/HOBBIES</center>', dataIndex: 'SpecialSkills', editor: 'textfield', flex: 2}
+						{ header: '<center>Special Skills/Hobbies</center>', dataIndex: 'SpecialSkills', editor: 'textfield', flex: 2}
 					],
 					buttons: [
 						{
@@ -922,7 +1320,7 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>NON-ACADEMIC DISTINCTIONS/RECOGNITION<br>(Write in Full)</center>', dataIndex: 'TitleofRecognition', editor: 'textfield', flex: 2},
+						{ header: '<center>Non-Academic Distinctions/Recognition<br>(Write in Full)</center>', dataIndex: 'TitleofRecognition', editor: 'textfield', flex: 2},
 						
 						
 					],
@@ -992,7 +1390,7 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>MEMBERSHIP IN<br>ASSOCIATION/ORGANIZATION<br>(Write in full)</center>', dataIndex: 'NameofOrganization', editor: 'textfield', flex: 2},
+						{ header: '<center>Membership in Association/Organization<br>(Write in full)</center>', dataIndex: 'NameofOrganization', editor: 'textfield', flex: 2},
 						
 						
 					],
@@ -1043,30 +1441,36 @@ Ext.define('Wizard', {
 				{
 					// OTHERS
 					xtype: 'panel',
-					title: 'Are you related by consaguinity or affinity to any of the following:',
-					layout: 'anchor',
+					title: 'Others',
 					collapsible: true,
 					collapsed: true,
 					bodyPadding: '20 20 20 20',
 					margin: '20 40 20 20',
-					defaults: {
-						width: '100%'
+					autoScroll:true,
+					height:250,
+					layout: {
+						type: 'table',
+						columns: 3
+						
 					},
+					defaults: {
+						frame:true
+						
+					},
+					colspan:2,
 					items:[
-						{
-							xtype: 'fieldcontainer',
-							layout: 'hbox',
-							items: [
+						
 								{
 									xtype: 'label',
-									text: 'Within the third degree(for National Government Employees):'+
+									text: 'Are you related by consaguinity or affinity to any of the following: Within the third degree(for National Government Employees):'+
 									'appointing authority, recommending authority, chief of office/bureau/department or person who has'+
 									'immediate supervision over you in the office, Bureau or Department where you will be appointed?',
-									width:800
+									width:900
 								},
 								{
 									xtype:'fieldcontainer',
 									defaultType: 'radiofield',
+									width:125,
 									layout: 'hbox',
 									items: [
 										{
@@ -1082,22 +1486,26 @@ Ext.define('Wizard', {
 											id        : 'radio2'
 										}
 									]
-								}
-							]
-						},
-						{
-							xtype: 'fieldcontainer',
-							layout: 'hbox',
-							items: [
+								},
+								{
+									title:'',
+									xtype:'textarea',
+									width:400,
+									fieldLabel:'If YES, give details'
+								},
+							
+						
+						
 								{
 									xtype: 'label',
-									text: 'Within the fourth degree(for Local Government Employees):'+
+									text: 'Are you related by consaguinity or affinity to any of the following: Within the fourth degree(for Local Government Employees):'+
 									'appointing authority or recommending authority where you will be appointed?',
 									width:800
 								},
 								{
 									xtype:'fieldcontainer',
 									defaultType: 'radiofield',
+									width:125,
 									layout: 'hbox',
 									items: [
 										{
@@ -1113,30 +1521,16 @@ Ext.define('Wizard', {
 											id        : 'radio4'
 										}
 									]
-								}
+								},
+								{
+									title:'',
+									xtype:'textarea',
+									width:400,
+									fieldLabel:'If YES, give details'
+								},
 								
-							]
-						}
-					]
-					
-				},
-				{
-					// OTHERS
-					xtype: 'panel',
-					title: 'Continuation....',
-					layout: 'anchor',
-					collapsible: true,
-					collapsed: true,
-					bodyPadding: '20 20 20 20',
-					margin: '20 40 20 20',
-					defaults: {
-						width: '100%'
-					},
-					items:[
-						{
-							xtype: 'fieldcontainer',
-							layout: 'hbox',
-							items: [
+						
+						
 								{
 									xtype: 'label',
 									text: 'Have you ever been formally charged?',
@@ -1145,6 +1539,7 @@ Ext.define('Wizard', {
 								{
 									xtype:'fieldcontainer',
 									defaultType: 'radiofield',
+									width:125,
 									layout: 'hbox',
 									items: [
 										{
@@ -1160,13 +1555,15 @@ Ext.define('Wizard', {
 											id        : 'radio6'
 										}
 									]
-								}
-							]
-						},
-						{
-							xtype: 'fieldcontainer',
-							layout: 'hbox',
-							items: [
+								},
+								{
+									title:'',
+									xtype:'textarea',
+									width:400,
+									fieldLabel:'If YES, give details'
+								},
+						
+						
 								{
 									xtype: 'label',
 									text: 'Have you ever been guilty of any administrative offense?',
@@ -1175,6 +1572,7 @@ Ext.define('Wizard', {
 								{
 									xtype:'fieldcontainer',
 									defaultType: 'radiofield',
+									width:125,
 									layout: 'hbox',
 									items: [
 										{
@@ -1190,14 +1588,15 @@ Ext.define('Wizard', {
 											id        : 'radio8'
 										}
 									]
-								}
-								
-							]
-						},
-						{
-							xtype: 'fieldcontainer',
-							layout: 'hbox',
-							items: [
+								},
+								{
+									title:'',
+									xtype:'textarea',
+									width:400,
+									fieldLabel:'If YES, give details'
+								},
+						
+						
 								{
 									xtype: 'label',
 									text: 'Have you been convicted of any crime or violation of any law, decree, ordinance or '+
@@ -1207,6 +1606,7 @@ Ext.define('Wizard', {
 								{
 									xtype:'fieldcontainer',
 									defaultType: 'radiofield',
+									width:125,
 									layout: 'hbox',
 									items: [
 										{
@@ -1222,14 +1622,15 @@ Ext.define('Wizard', {
 											id        : 'radio10'
 										}
 									]
-								}
-								
-							]
-						},
-						{
-							xtype: 'fieldcontainer',
-							layout: 'hbox',
-							items: [
+								},
+								{
+									title:'',
+									xtype:'textarea',
+									width:400,
+									fieldLabel:'If YES, give details'
+								},
+						
+						
 								{
 									xtype: 'label',
 									text: 'Have you ever been separated from the service in any of the following modes:'+
@@ -1240,6 +1641,7 @@ Ext.define('Wizard', {
 								{
 									xtype:'fieldcontainer',
 									defaultType: 'radiofield',
+									width:125,
 									layout: 'hbox',
 									items: [
 										{
@@ -1255,14 +1657,15 @@ Ext.define('Wizard', {
 											id        : 'radio12'
 										}
 									]
-								}
-								
-							]
-						},
-						{
-							xtype: 'fieldcontainer',
-							layout: 'hbox',
-							items: [
+								},
+								{
+									title:'',
+									xtype:'textarea',
+									width:400,
+									fieldLabel:'If YES, give details'
+								},
+
+						
 								{
 									xtype: 'label',
 									text: 'Have you ever been a candidate in a national or local election(except Barangay election)?',
@@ -1271,6 +1674,7 @@ Ext.define('Wizard', {
 								{
 									xtype:'fieldcontainer',
 									defaultType: 'radiofield',
+									width:125,
 									layout: 'hbox',
 									items: [
 										{
@@ -1286,14 +1690,15 @@ Ext.define('Wizard', {
 											id        : 'radio14'
 										}
 									]
-								}
+								},
+								{
+									title:'',
+									xtype:'textarea',
+									width:400,
+									fieldLabel:'If YES, give details'
+								},
 								
-							]
-						},
-						{
-							xtype: 'fieldcontainer',
-							layout: 'hbox',
-							items: [
+						
 								{
 									xtype: 'label',
 									text: 'Pursuant to: (a)Indigenous People\'s Act(RA 8371); (b)Magna Carta for Disabled Persons(RA 7277); '+
@@ -1303,6 +1708,7 @@ Ext.define('Wizard', {
 								{
 									xtype:'fieldcontainer',
 									defaultType: 'radiofield',
+									width:125,
 									layout: 'hbox',
 									items: [
 										{
@@ -1318,14 +1724,14 @@ Ext.define('Wizard', {
 											id        : 'radio16'
 										}
 									]
-								}
-								
-							]
-						},
-						{
-							xtype: 'fieldcontainer',
-							layout: 'hbox',
-							items: [
+								},
+								{
+									title:'',
+									xtype:'textarea',
+									width:400,
+									fieldLabel:'If YES, give details'
+								},
+						
 								{
 									xtype: 'label',
 									text: 'Are you differently abled?',
@@ -1334,6 +1740,7 @@ Ext.define('Wizard', {
 								{
 									xtype:'fieldcontainer',
 									defaultType: 'radiofield',
+									width:125,
 									layout: 'hbox',
 									items: [
 										{
@@ -1349,14 +1756,14 @@ Ext.define('Wizard', {
 											id        : 'radio18'
 										}
 									]
-								}
-								
-							]
-						},
-						{
-							xtype: 'fieldcontainer',
-							layout: 'hbox',
-							items: [
+								},
+								{
+									title:'',
+									xtype:'textarea',
+									width:400,
+									fieldLabel:'If YES, give details'
+								},
+						
 								{
 									xtype: 'label',
 									text: 'Are you a solo parent?',
@@ -1365,6 +1772,7 @@ Ext.define('Wizard', {
 								{
 									xtype:'fieldcontainer',
 									defaultType: 'radiofield',
+									width:125,
 									layout: 'hbox',
 									items: [
 										{
@@ -1380,10 +1788,13 @@ Ext.define('Wizard', {
 											id        : 'radio20'
 										}
 									]
+								},
+								{
+									title:'',
+									xtype:'textfield',
+									width:400,
+									fieldLabel:'If YES, give details'
 								}
-								
-							]
-						}
 					]
 					
 				},
@@ -1410,9 +1821,9 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>NAME</center>', dataIndex: 'cReference', editor: 'textfield', flex: 2},
-						{ header: '<center>ADDRESS</center>', dataIndex: 'Address', editor: 'textfield', flex: 2},
-						{ header: '<center>TEL. NO.</center>', dataIndex: 'cNumber', editor: 'textfield', flex: 1}
+						{ header: '<center>Name</center>', dataIndex: 'cReference', editor: 'textfield', flex: 2},
+						{ header: '<center>Address</center>', dataIndex: 'Address', editor: 'textfield', flex: 2},
+						{ header: '<center>Tel. No.</center>', dataIndex: 'cNumber', editor: 'textfield', flex: 1}
 						
 					],
 					buttons: [
