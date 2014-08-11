@@ -587,7 +587,7 @@ Ext.define('Wizard', {
 							handler: function() 
 							{	
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								console.log(rowEdit);
 								// Create a model instance
@@ -596,7 +596,7 @@ Ext.define('Wizard', {
 									dob: Ext.Date.clearTime(new Date())
 								}); 
 								
-								storeKo.add(r);
+								store.add(r);
 								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
 							}
 						},
@@ -605,12 +605,12 @@ Ext.define('Wizard', {
 							handler: function() 
 							{
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								var sm = grid.getSelectionModel();
 								rowEdit.cancelEdit();
-								storeKo.remove(sm.getSelection());
-								if (storeKo.getCount() > 0) {
+								store.remove(sm.getSelection());
+								if (store.getCount() > 0) {
 									sm.select(0);
 								}
 							},
@@ -730,7 +730,7 @@ Ext.define('Wizard', {
 							handler: function() 
 							{	
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								console.log(rowEdit);
 								// Create a model instance
@@ -745,7 +745,7 @@ Ext.define('Wizard', {
 									
 								}); 
 								
-								storeKo.add(r);
+								store.add(r);
 								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
 							}
 						},
@@ -754,12 +754,12 @@ Ext.define('Wizard', {
 							handler: function() 
 							{
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								var sm = grid.getSelectionModel();
 								rowEdit.cancelEdit();
-								storeKo.remove(sm.getSelection());
-								if (storeKo.getCount() > 0) {
+								store.remove(sm.getSelection());
+								if (store.getCount() > 0) {
 									sm.select(0);
 								}
 							},
@@ -853,7 +853,7 @@ Ext.define('Wizard', {
 							handler: function() 
 							{	
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								console.log(rowEdit);
 								// Create a model instance
@@ -866,7 +866,7 @@ Ext.define('Wizard', {
 									
 								}); 
 								
-								storeKo.add(r);
+								store.add(r);
 								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
 							}
 						},
@@ -875,12 +875,12 @@ Ext.define('Wizard', {
 							handler: function() 
 							{
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								var sm = grid.getSelectionModel();
 								rowEdit.cancelEdit();
-								storeKo.remove(sm.getSelection());
-								if (storeKo.getCount() > 0) {
+								store.remove(sm.getSelection());
+								if (store.getCount() > 0) {
 									sm.select(0);
 								}
 							},
@@ -989,7 +989,7 @@ Ext.define('Wizard', {
 							handler: function() 
 							{	
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								console.log(rowEdit);
 								// Create a model instance
@@ -1002,7 +1002,7 @@ Ext.define('Wizard', {
 									
 								}); 
 								
-								storeKo.add(r);
+								store.add(r);
 								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
 							}
 						},
@@ -1011,12 +1011,12 @@ Ext.define('Wizard', {
 							handler: function() 
 							{
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								var sm = grid.getSelectionModel();
 								rowEdit.cancelEdit();
-								storeKo.remove(sm.getSelection());
-								if (storeKo.getCount() > 0) {
+								store.remove(sm.getSelection());
+								if (store.getCount() > 0) {
 									sm.select(0);
 								}
 							},
@@ -1099,7 +1099,7 @@ Ext.define('Wizard', {
 							handler: function() 
 							{	
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								console.log(rowEdit);
 								// Create a model instance
@@ -1112,7 +1112,7 @@ Ext.define('Wizard', {
 									
 								}); 
 								
-								storeKo.add(r);
+								store.add(r);
 								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
 							}
 						},
@@ -1121,12 +1121,12 @@ Ext.define('Wizard', {
 							handler: function() 
 							{
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								var sm = grid.getSelectionModel();
 								rowEdit.cancelEdit();
-								storeKo.remove(sm.getSelection());
-								if (storeKo.getCount() > 0) {
+								store.remove(sm.getSelection());
+								if (store.getCount() > 0) {
 									sm.select(0);
 								}
 							},
@@ -1182,7 +1182,7 @@ Ext.define('Wizard', {
 							handler: function() 
 							{	
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								console.log(rowEdit);
 								// Create a model instance
@@ -1195,7 +1195,7 @@ Ext.define('Wizard', {
 									
 								}); 
 								
-								storeKo.add(r);
+								store.add(r);
 								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
 							}
 						},
@@ -1204,12 +1204,12 @@ Ext.define('Wizard', {
 							handler: function() 
 							{
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								var sm = grid.getSelectionModel();
 								rowEdit.cancelEdit();
-								storeKo.remove(sm.getSelection());
-								if (storeKo.getCount() > 0) {
+								store.remove(sm.getSelection());
+								if (store.getCount() > 0) {
 									sm.select(0);
 								}
 							},
@@ -1260,7 +1260,7 @@ Ext.define('Wizard', {
 							handler: function() 
 							{	
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								console.log(rowEdit);
 								// Create a model instance
@@ -1268,7 +1268,7 @@ Ext.define('Wizard', {
 									SpecialSkills: 'New Skills'									
 								}); 
 								
-								storeKo.add(r);
+								store.add(r);
 								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
 							}
 						},
@@ -1277,12 +1277,12 @@ Ext.define('Wizard', {
 							handler: function() 
 							{
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								var sm = grid.getSelectionModel();
 								rowEdit.cancelEdit();
-								storeKo.remove(sm.getSelection());
-								if (storeKo.getCount() > 0) {
+								store.remove(sm.getSelection());
+								if (store.getCount() > 0) {
 									sm.select(0);
 								}
 							},
@@ -1330,7 +1330,7 @@ Ext.define('Wizard', {
 							handler: function() 
 							{	
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								console.log(rowEdit);
 								// Create a model instance
@@ -1338,7 +1338,7 @@ Ext.define('Wizard', {
 									TitleofRecognition: 'New Recognition'
 								}); 
 								
-								storeKo.add(r);
+								store.add(r);
 								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
 							}
 						},
@@ -1347,12 +1347,12 @@ Ext.define('Wizard', {
 							handler: function() 
 							{
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								var sm = grid.getSelectionModel();
 								rowEdit.cancelEdit();
-								storeKo.remove(sm.getSelection());
-								if (storeKo.getCount() > 0) {
+								store.remove(sm.getSelection());
+								if (store.getCount() > 0) {
 									sm.select(0);
 								}
 							},
@@ -1400,7 +1400,7 @@ Ext.define('Wizard', {
 							handler: function() 
 							{	
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								console.log(rowEdit);
 								// Create a model instance
@@ -1408,7 +1408,7 @@ Ext.define('Wizard', {
 									NameofOrganization: 'New Organization'
 								}); 
 								
-								storeKo.add(r);
+								store.add(r);
 								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
 							}
 						},
@@ -1417,12 +1417,12 @@ Ext.define('Wizard', {
 							handler: function() 
 							{
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								var sm = grid.getSelectionModel();
 								rowEdit.cancelEdit();
-								storeKo.remove(sm.getSelection());
-								if (storeKo.getCount() > 0) {
+								store.remove(sm.getSelection());
+								if (store.getCount() > 0) {
 									sm.select(0);
 								}
 							},
@@ -1832,7 +1832,7 @@ Ext.define('Wizard', {
 							handler: function() 
 							{	
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								console.log(rowEdit);
 								// Create a model instance
@@ -1842,7 +1842,7 @@ Ext.define('Wizard', {
 									cNumber:''
 								}); 
 								
-								storeKo.add(r);
+								store.add(r);
 								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
 							}
 						},
@@ -1851,12 +1851,12 @@ Ext.define('Wizard', {
 							handler: function() 
 							{
 								var grid = this.up('grid');
-								var storeKo = grid.getStore();
+								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
 								var sm = grid.getSelectionModel();
 								rowEdit.cancelEdit();
-								storeKo.remove(sm.getSelection());
-								if (storeKo.getCount() > 0) {
+								store.remove(sm.getSelection());
+								if (store.getCount() > 0) {
 									sm.select(0);
 								}
 							},
