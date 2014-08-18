@@ -1962,6 +1962,7 @@ Ext.define('Wizard', {
 							'immediate supervision over you in the office, Bureau or Department where you will be appointed?',
 							width:900
 						},
+						/*
 						{
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
@@ -1981,6 +1982,35 @@ Ext.define('Wizard', {
 									id        : 'radio2'
 								}
 							]
+						},
+						*/
+						{
+							xtype: 'fieldcontainer',
+							defaultType: 'radiofield',
+							itemId: 'national',
+							items: [
+								{
+									itemId: 'yes',
+									boxLabel: 'Yes',
+									name: 'national'
+								},
+								{
+									itemId: 'no',
+									boxLabel: 'No',
+									name: 'national'
+								}
+							],
+							getValue: function(){
+								var me = this;
+								return me.down('#yes').getValue();
+							},
+							setValue: function(value){
+								var me = this;
+								if(value)
+									me.down('#yes').setValue(true);
+								else
+									me.down('#no').setValue(true)
+							}
 						},
 						{
 							title:'',
