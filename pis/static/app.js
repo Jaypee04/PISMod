@@ -1,8 +1,418 @@
+var personnelData = {
+  "surName": "Del Mundo",
+  "firstName": "Jaypee",
+  "middleName": "Catague",
+  "nameExtension": "N\/A",
+  "dateOfBirth": "1989-09-21",
+  "placeOfBirth": "Quezon City",
+  "sex": "M",
+  "civilStatus": "Single",
+  "NID": "12-0008",
+  "TIN": "282 196 168",
+  "GSIS": "2003397303",
+  "PAGIBIG": "1210-8678-3213",
+  "PHILHEALTH": "0000",
+  "SSS": "34-2463527-8",
+  "eMail": "jcdelmundo@namria.gov.ph",
+  "Cp": "+639334551979",
+  "resAdd": "B5 L9 Ph3 Peace Village, San Luis, Antipolo City",
+  "resZip": "1870",
+  "resTel": "N\/A",
+  "perAdd": "B5 L9 Ph3 Peace Village, San Luis, Antipolo City",
+  "perZip": "1870",
+  "perTel": "N\/A",
+  "spSurname": "N\/A",
+  "spFirstname": "N\/A",
+  "spMiddlename": "N\/A",
+  "spOccu": "N\/A",
+  "spEmployer": "N\/A",
+  "spBusAdd": "N\/A",
+  "spBusTel": "N\/A",
+  "children": [
+    
+  ],
+  "fatSurname": "Del Mundo",
+  "fatFirstname": "Petronilo",
+  "fatMiddlename": "Caguimbal",
+  "motSurname": "Catague",
+  "motFirstname": "Joycelynn",
+  "motMiddlename": "Trinidad",
+  "education": [
+    {
+      "schoolName": "Marian School of Antipolo, Inc.",
+      "degree": "Elementary",
+      "yearGraduated": "2002",
+      "highestGrade": "",
+      "fromDate": "1997",
+      "toDate": "2002",
+      "scholarship": ""
+    },
+    {
+      "schoolName": "Don Antonio de Zuzuarregui, Sr. Memorial Academy",
+      "degree": "High School",
+      "yearGraduated": "2006",
+      "highestGrade": "",
+      "fromDate": "2002",
+      "toDate": "2006",
+      "scholarship": ""
+    }
+  ],
+  "training": [
+    {
+      "titleOfSeminar": "Training on Advanced GIS",
+      "trainingFrom": "03\/04\/2013",
+      "trainingTo": "03\/08\/2013",
+      "numberOfHours": "40",
+      "conductedBy": "NAMRIA-GTC"
+    }
+  ],
+  "skills": [
+    {
+      "sSkills": "Driving"
+    }
+  ],
+  "recognition": [
+    {
+      "recog": "N\/A"
+    }
+  ],
+  "organization": [
+    {
+      "org": "O.N.E"
+    }
+  ],
+  "charReference": [
+    {
+      "cName": "John SF Fabic",
+      "cAdd": "NAMRIA-GISMB",
+      "cNum": "884-2851"
+    }
+  ]
+};
+
 Ext.define('Wizard', {
 	
 	alias: 'widget.wizard',
 	extend: 'Ext.tab.Panel',
 	requires:['Ext.util.*'],
+	tbar: [
+		{
+			xtype: 'button',
+			text: 'Save',
+			handler: function(){
+				var me = this.up('wizard');
+				me.getFormData();
+				//me.getChildren();
+			}
+		},
+		{
+			xtype: 'button',
+			text: 'Load',
+			handler: function(){
+				var me = this.up('wizard');
+				me.loadFormData(personnelData);
+			}
+		}
+		
+	],
+	loadFormData: function(p){
+		var me = this;
+		
+		me.down('#txtSurname').setValue(p.surName);
+		me.down('#txtFirstname').setValue(p.firstName);
+		me.down('#txtMiddlename').setValue(p.middleName);
+		me.down('#txtNameExtension').setValue(p.nameExtension);
+		me.down('#dteDateofBirth').setValue(p.dateOfBirth);
+		me.down('#txtPlaceofBirth').setValue(p.placeOfBirth);
+		me.down('#cboSex').setValue(p.sex);
+		me.down('#cboCivilStatus').setValue(p.civilStatus);
+		me.down('#txtNID').setValue(p.NID);
+		me.down('#txtTIN').setValue(p.TIN);
+		me.down('#txtGSIS').setValue(p.GSIS);
+		me.down('#txtPagIbig').setValue(p.PAGIBIG);
+		me.down('#txtPhilH').setValue(p.PHILHEALTH);
+		me.down('#txtSSS').setValue(p.SSS);
+		me.down('#txtEmail').setValue(p.eMail);
+		me.down('#txtCp').setValue(p.Cp);
+		me.down('#txtResAdd').setValue(p.resAdd);
+		me.down('#txtResZip').setValue(p.resZip);
+		me.down('#txtResTel').setValue(p.resTel);
+		me.down('#txtPerAdd').setValue(p.perAdd);
+		me.down('#txtPerZip').setValue(p.perZip);
+		me.down('#txtPerTel').setValue(p.perTel);
+		me.down('#txtSpSurname').setValue(p.spSurname);
+		me.down('#txtSpFirstname').setValue(p.spFirstname);
+		me.down('#txtSpMiddlename').setValue(p.spMiddlename);
+		me.down('#txtSpOccu').setValue(p.spOccu);
+		me.down('#txtSpEmp').setValue(p.spEmployer);
+		me.down('#txtSpBus').setValue(p.spBusAdd);
+		me.down('#txtSpBusTel').setValue(p.spBusTel);
+		
+		var grid = me.down('#gridChildren');
+		grid.getStore().removeAll();
+		// load children
+		for(item in p.children){
+			var child = p.children[item];
+			grid.getStore().add({
+				name: child.fullName,
+				dob: child.dateOfBirth
+			});
+		}
+		
+		me.down('#txtFatSurname').setValue(p.fatSurname);
+		me.down('#txtFatFirstname').setValue(p.fatFirstname);
+		me.down('#txtFatMiddlename').setValue(p.fatMiddlename);
+		me.down('#txtMotSurname').setValue(p.motSurname);
+		me.down('#txtMotFirstname').setValue(p.motFirstname);
+		me.down('#txtMotMiddlename').setValue(p.motMiddlename);
+		
+		var grid1 = me.down('#gridEducation');
+		grid1.getStore().removeAll();
+		// load education
+		for(item in p.education){
+			var educ = p.education[item];
+			grid1.getStore().add({
+				NameofSchool: educ.schoolName,
+				DegreeCourse: educ.degree,
+				YearGraduated: educ.yearGraduated,
+				HighestGrade: educ.highestGrade,
+				FromDate: educ.fromDate,
+				ToDate: educ.toDate,
+				Scholarship: educ.scholarship
+			});
+		}
+		
+		var grid2 = me.down('#gridTraining');
+		grid2.getStore().removeAll();
+		// load training
+		for(item in p.training){
+			var train = p.training[item];
+			grid2.getStore().add({
+				TitleofSeminar: train.titleOfSeminar,
+				TrainingFrom: train.trainingFrom,
+				TrainingTo: train.trainingTo,
+				NumberofHours: train.numberOfHours,
+				ConductedBy: train.conductedBy
+			});
+		}
+		
+		var grid3 = me.down('#gridSkills');
+		grid3.getStore().removeAll();
+		// load skills
+		for(item in p.skills){
+			var s = p.skills[item];
+			grid3.getStore().add({
+				SpecialSkills: s.sSkills
+			});
+		}
+		
+		var grid4 = me.down('#gridRecognition');
+		grid4.getStore().removeAll();
+		// load recognition
+		for(item in p.recognition){
+			var r = p.recognition[item];
+			grid4.getStore().add({
+				TitleofRecognition: r.recog
+			});
+		}
+		
+		var grid5 = me.down('#gridOrganization');
+		grid5.getStore().removeAll();
+		// load organization
+		for(item in p.organization){
+			var o = p.organization[item];
+			grid5.getStore().add({
+				NameofOrganization: o.org
+			});
+		}
+		
+		var grid6 = me.down('#gridReference');
+		grid6.getStore().removeAll();
+		// load reference
+		for(item in p.charReference){
+			var c = p.charReference[item];
+			grid6.getStore().add({
+				cReference: c.cName, 
+				Address: c.cAdd, 
+				cNumber: c.cNum
+				
+			});
+		}
+		me.down('#txtCertificate').setValue(p.tax);
+		me.down('#txtIssuedAt').setValue(p.issuedAt);
+		me.down('#dteIssuance').setValue(p.issuedDate);
+		me.down('#dteDateAccomplished').setValue(p.dateAccomplished);
+		
+	},
+	getFormData: function(){
+		var me = this;
+		
+		var personnel = {
+			surName: me.down('#txtSurname').getValue(),
+			firstName: me.down('#txtFirstname').getValue(),
+			middleName: me.down('#txtMiddlename').getValue(),
+			nameExtension: me.down('#txtNameExtension').getValue(),
+			dateOfBirth: me.down('#dteDateofBirth').getValue(),
+			placeOfBirth: me.down('#txtPlaceofBirth').getValue(),
+			sex: me.down('#cboSex').getValue(),
+			civilStatus: me.down('#cboCivilStatus').getValue(),
+			NID: me.down('#txtNID').getValue(),
+			TIN: me.down('#txtTIN').getValue(),
+			GSIS: me.down('#txtGSIS').getValue(),
+			PAGIBIG: me.down('#txtPagIbig').getValue(),
+			PHILHEALTH: me.down('#txtPhilH').getValue(),
+			SSS: me.down('#txtSSS').getValue(),
+			eMail: me.down('#txtEmail').getValue(),
+			Cp: me.down('#txtCp').getValue(),
+			resAdd: me.down('#txtResAdd').getValue(),
+			resZip: me.down('#txtResZip').getValue(),
+			resTel: me.down('#txtResTel').getValue(),
+			perAdd: me.down('#txtPerAdd').getValue(),
+			perZip: me.down('#txtPerZip').getValue(),
+			perTel: me.down('#txtPerTel').getValue(),
+			spSurname: me.down('#txtSpSurname').getValue(),
+			spFirstname: me.down('#txtSpFirstname').getValue(),
+			spMiddlename: me.down('#txtSpMiddlename').getValue(),
+			spOccu: me.down('#txtSpOccu').getValue(),
+			spEmployer: me.down('#txtSpEmp').getValue(),
+			spBusAdd: me.down('#txtSpBus').getValue(),
+			spBusTel: me.down('#txtSpBusTel').getValue(),
+			children: me.getChildren(),
+			fatSurname: me.down('#txtFatSurname').getValue(),
+			fatFirstname: me.down('#txtFatFirstname').getValue(),
+			fatMiddlename: me.down('#txtFatMiddlename').getValue(),
+			motSurname: me.down('#txtMotSurname').getValue(),
+			motFirstname: me.down('#txtMotFirstname').getValue(),
+			motMiddlename: me.down('#txtMotMiddlename').getValue(),
+			education: me.getEducation(),
+			training: me.getTraining(),
+			skills: me.getSkills(),
+			recognition: me.getRecognition(),
+			organization: me.getOrganization(),
+			charReference: me.getCharRef(),
+			tax: me.down('#txtCertificate').getValue(),
+			issuedAt: me.down('#txtIssuedAt').getValue(),
+			issuedDate: me.down('#dteIssuance').getValue(),
+			dateAccomplished: me.down('#dteDateAccomplished').getValue()
+		};
+
+		console.log(JSON.stringify(personnel));
+	
+		
+	},
+	getChildren: function(){
+		var me = this;
+		var children = [];
+		
+		
+		var grid = me.down('#gridChildren');
+		
+		grid.getStore().data.each(function(row) {
+			children.push({ 
+				fullName: row.data['name'], 
+				dateOfBirth: row.data['dob'] 
+			});
+		});
+		
+		return children;
+		
+	},
+	getEducation: function(){
+		var me = this;
+		var education = [];
+		
+		
+		var grid = me.down('#gridEducation');
+		
+		grid.getStore().data.each(function(row) {
+			education.push({ 
+				schoolName: row.data['NameofSchool'], 
+				degree: row.data['DegreeCourse'],
+				yearGraduated: row.data['YearGraduated'],
+				highestGrade: row.data['HighestGrade'],
+				fromDate: row.data['FromDate'],
+				toDate: row.data['ToDate'],
+				scholarship: row.data['Scholarship']
+			});
+		});
+		
+		return education;
+		
+	},
+	getTraining: function(){
+		var me = this;
+		var training = [];
+		
+		
+		var grid = me.down('#gridTraining');
+		grid.getStore().data.each(function(row) {
+			training.push({ 
+				titleOfSeminar: row.data['TitleofSeminar'], 
+				trainingFrom: row.data['TrainingFrom'],
+				trainingTo: row.data['TrainingTo'],
+				numberOfHours: row.data['NumberofHours'],
+				conductedBy: row.data['ConductedBy']
+				
+			});
+		});
+		
+		return training;
+		
+	},
+	getSkills: function(){
+		var me = this;
+		var skills = [];
+		
+		var grid = me.down('#gridSkills');
+		grid.getStore().data.each(function(row) {
+			skills.push({ 
+				sSkills: row.data['SpecialSkills']
+			});
+		});
+		
+		return skills;
+	},
+	getRecognition: function(){
+		var me = this;
+		var recognition = [];
+		
+		var grid = me.down('#gridRecognition');
+		grid.getStore().data.each(function(row) {
+			recognition.push({ 
+				recog: row.data['TitleofRecognition']
+			});
+		});
+		
+		return recognition;
+	},
+	getOrganization: function(){
+		var me = this;
+		var organization = [];
+		
+		var grid = me.down('#gridOrganization');
+		grid.getStore().data.each(function(row) {
+			organization.push({ 
+				org: row.data['NameofOrganization']
+			});
+		});
+		
+		return organization;
+	},
+	getCharRef: function(){
+		var me = this;
+		var charRef = [];
+		
+		var grid = me.down('#gridReference');
+		grid.getStore().data.each(function(row) {
+			charRef.push({ 
+				cName: row.data['cReference'],
+				cAdd: row.data['Address'],
+				cNum: row.data['cNumber']
+			});
+		});
+		
+		return charRef;
+	},
 	initComponent: function(){
 		//Model for children
 		Ext.define('Children',{
@@ -66,7 +476,7 @@ Ext.define('Wizard', {
 			]
 		}); 
 		//model for Work Experience
-		 Ext.define('WorkExp', {
+		Ext.define('WorkExp', {
 			extend: 'Ext.data.Model',
 			fields: [
 				{ header: 'workExFrom' },
@@ -119,8 +529,9 @@ Ext.define('Wizard', {
 	},
 	rowEditing: function(){
 		return Ext.create('Ext.grid.plugin.RowEditing', {
-        clicksToMoveEditor: 1,
-        autoCancel: false
+			pluginId: 'rowEditingPlugin',
+			clicksToMoveEditor: 1,
+			autoCancel: false
 		});
 	},
 	items: [
@@ -145,12 +556,14 @@ Ext.define('Wizard', {
 						// SURNAME
 						{
 							xtype: 'textfield',
+							itemId:'txtSurname',
 							fieldLabel: 'Surname',
 							emptyText: 'Rizal'
 						},
 						// FIRST NAME
 						{
 							xtype: 'textfield',
+							itemId:'txtFirstname',
 							fieldLabel: 'First name',
 							emptyText: 'Jose'
 						},
@@ -161,6 +574,7 @@ Ext.define('Wizard', {
 								// MIDDLE NAME
 								{
 									xtype: 'textfield',
+									itemId:'txtMiddlename',
 									fieldLabel: 'Middle name',
 									emptyText: 'Protacio',
 									flex: 2
@@ -168,6 +582,7 @@ Ext.define('Wizard', {
 								// NAME EXTENSION
 								{
 									xtype: 'textfield',
+									itemId:'txtNameExtension',
 									fieldLabel: 'Name extension',
 									labelWidth: 120,
 									padding: '0 0 0 10',
@@ -183,12 +598,15 @@ Ext.define('Wizard', {
 								// DATE OF BIRTH
 								{
 									xtype: 'datefield',
+									itemId:'dteDateofBirth',
+									format:'m/d/Y',
 									fieldLabel: 'Date of Birth',
 									flex: 1
 								},
 								// PLACE OF BIRTH
 								{
 									xtype: 'textfield',
+									itemId:'txtPlaceofBirth',
 									fieldLabel: 'Place of Birth',
 									labelWidth: 120,
 									padding: '0 0 0 10',
@@ -204,6 +622,7 @@ Ext.define('Wizard', {
 								// SEX
 								{
 									xtype: 'combo',
+									itemId:'cboSex',
 									store: ['F', 'M'],
 									fieldLabel: 'Sex',
 									flex: 1,
@@ -212,6 +631,7 @@ Ext.define('Wizard', {
 								// CIVIL STATUS
 								{
 									xtype: 'combo',
+									itemId:'cboCivilStatus',
 									fieldLabel: 'Civil status',
 									store: ['Single','Married','Annulled','Widowed','Separated','Others'],
 									labelWidth: 120,
@@ -330,12 +750,14 @@ Ext.define('Wizard', {
 								// NAMRIA ID
 								{
 									xtype: 'textfield',
+									itemId:'txtNID',
 									fieldLabel: 'NAMRIA ID',
 									flex: 1
 								},
 								// TIN
 								{
 									xtype: 'textfield',
+									itemId:'txtTIN',
 									fieldLabel: 'TIN',
 									padding: '0 0 0 10',
 									flex: 1
@@ -349,12 +771,14 @@ Ext.define('Wizard', {
 								// GSIS
 								{
 									xtype: 'textfield',
+									itemId:'txtGSIS',
 									fieldLabel: 'GSIS ID',
 									flex: 1
 								},
 								// PAG-IBIG
 								{
 									xtype: 'textfield',
+									itemId:'txtPagIbig',
 									fieldLabel: 'PAG-IBIG ID',
 									padding: '0 0 0 10',
 									flex: 1
@@ -368,12 +792,14 @@ Ext.define('Wizard', {
 								// PHILHEALTH
 								{
 									xtype: 'textfield',
+									itemId:'txtPhilH',
 									fieldLabel: 'PHILHEALTH',
 									flex: 1
 								},
 								// SSS
 								{
 									xtype: 'textfield',
+									itemId:'txtSSS',
 									fieldLabel: 'SSS ID',
 									padding: '0 0 0 10',
 									flex: 1
@@ -400,12 +826,14 @@ Ext.define('Wizard', {
 						// EMAIL ADDRESS
 						{
 							xtype: 'textfield',
+							itemId:'txtEmail',
 							fieldLabel: 'Email Address',
 							padding: '0 0 0 10'
 						},
 						// CELLPHONE NO.
 						{
 							xtype: 'textfield',
+							itemId:'txtCp',
 							fieldLabel: 'Cellphone No.',
 							padding: '0 0 0 10'
 						}
@@ -428,6 +856,7 @@ Ext.define('Wizard', {
 						// ADDRESS
 						{
 							xtype: 'textarea',
+							itemId:'txtResAdd',
 							fieldLabel: 'Address',
 							emptyText: 'house no., building, street, barangay, municipality, district, province',
 							width: '100%'
@@ -435,12 +864,14 @@ Ext.define('Wizard', {
 						// ZIP CODE
 						{
 							xtype: 'textfield',
+							itemId:'txtResZip',
 							fieldLabel: 'Zip code',
 							padding: '0 0 0 10'
 						},
 						// TELEPHONE
 						{
 							xtype: 'textfield',
+							itemId:'txtResTel',
 							fieldLabel: 'Telephone',
 							padding: '0 0 0 10'
 						}
@@ -463,6 +894,7 @@ Ext.define('Wizard', {
 						// ADDRESS
 						{
 							xtype: 'textarea',
+							itemId:'txtPerAdd',
 							fieldLabel: 'Address',
 							emptyText: 'house no., building, street, barangay, municipality, district, province',
 							width: '100%'
@@ -470,12 +902,14 @@ Ext.define('Wizard', {
 						// ZIP CODE
 						{
 							xtype: 'textfield',
+							itemId:'txtPerZip',
 							fieldLabel: 'Zip code',
 							padding: '0 0 0 10'
 						},
 						// TELEPHONE
 						{
 							xtype: 'textfield',
+							itemId:'txtPerTel',
 							fieldLabel: 'Telephone',
 							padding: '0 0 0 10'
 						}
@@ -505,37 +939,44 @@ Ext.define('Wizard', {
 						// SURNAME
 						{
 							xtype: 'textfield',
+							itemId:'txtSpSurname',
 							fieldLabel: 'Surname'
 						},
 						// FIRST NAME
 						{
 							xtype: 'textfield',
+							itemId:'txtSpFirstname',
 							fieldLabel: 'First name'
 						},
 						// MIDDLE NAME
 						{
 							xtype: 'textfield',
+							itemId:'txtSpMiddlename',
 							fieldLabel: 'Middle name'
 						},
 						// OCCUPATION
 						{
 							xtype: 'textfield',
+							itemId:'txtSpOccu',
 							fieldLabel: 'Occupation'
 						},
 						// EMPLOYER/BUSINESS
 						{
 							xtype: 'textfield',
+							itemId:'txtSpEmp',
 							fieldLabel: 'Employer',
 							emptyText: '(enter business name if self employed)'
 						},
 						// BUSINESS ADDRESS
 						{
 							xtype: 'textfield',
+							itemId:'txtSpBus',
 							fieldLabel: 'Business Address'
 						},
-						// EMPLOYER/BUSINESS
+						// EMPLOYER TELEPHONE
 						{
 							xtype: 'textfield',
+							itemId:'txtSpBusTel',
 							fieldLabel: 'Telephone'
 						}
 					]
@@ -543,6 +984,7 @@ Ext.define('Wizard', {
 				// CHILDREN
 				{
 					xtype: 'grid',
+					itemId:'gridChildren',
 					collapsible: true,
 					collapsed: true,
 					margin: '20 40 20 20',
@@ -552,8 +994,8 @@ Ext.define('Wizard', {
 					    fields:['name', 'dob'],
 					    data: { 
 							items: [
-								{name: 'Sophia Isabel M. Arboleda', dob: '11/08/2010'},
-								{name: 'Damien Angelo M. Arboleda', dob: '08/27/2012'},
+								/* {name: 'Sophia Isabel M. Arboleda', dob: '11/08/2010'},
+								{name: 'Damien Angelo M. Arboleda', dob: '08/27/2012'}, */
 							]
 					        
 					    },
@@ -641,16 +1083,19 @@ Ext.define('Wizard', {
 						// SURNAME
 						{
 							xtype: 'textfield',
+							itemId:'txtFatSurname',
 							fieldLabel: 'Surname'
 						},
 						// FIRST NAME
 						{
 							xtype: 'textfield',
+							itemId:'txtFatFirstname',
 							fieldLabel: 'First name'
 						},
 						// MIDDLE NAME
 						{
 							xtype: 'textfield',
+							itemId:'txtFatMiddlename',
 							fieldLabel: 'Middle name'
 						}
 					]
@@ -671,16 +1116,19 @@ Ext.define('Wizard', {
 						// SURNAME
 						{
 							xtype: 'textfield',
+							itemId:'txtMotSurname',
 							fieldLabel: 'Surname'
 						},
 						// FIRST NAME
 						{
 							xtype: 'textfield',
+							itemId:'txtMotFirstname',
 							fieldLabel: 'First name'
 						},
 						// MIDDLE NAME
 						{
 							xtype: 'textfield',
+							itemId:'txtMotMiddlename',
 							fieldLabel: 'Middle name'
 						}
 					]
@@ -692,6 +1140,7 @@ Ext.define('Wizard', {
 			items: [
 				{
 					xtype: 'grid',
+					itemId:'gridEducation',
 					title: 'Educational Background',
 					collapsible: true,
 					collapsed: false,
@@ -701,9 +1150,7 @@ Ext.define('Wizard', {
 						fields:['NameofSchool', 'DegreeCourse', 'YearGraduated', 'HighestGrade','FromDate', 'ToDate', 'Scholarship'],
 						data: { 
 							items: [
-								{NameofSchool: 'Elementary School', DegreeCourse: 'Elementary', YearGraduated: '', HighestGrade: '', FromDate:'', ToDate:'', Scholarship:''},
-								{NameofSchool: 'High School', DegreeCourse: 'Secondary', YearGraduated: '', HighestGrade: '', FromDate:'', ToDate:'', Scholarship:''},
-								{NameofSchool: 'College', DegreeCourse: 'B.S.I.T', YearGraduated: '', HighestGrade: '', FromDate:'', ToDate:'', Scholarship:''}
+								
 							]
 						},
 						proxy: {
@@ -715,13 +1162,33 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>Name Of School<br>(Write in Full)</center>', dataIndex: 'NameofSchool', editor: 'textfield', flex:2 },
-						{ header: '<center>Degree/Course<br>(Write in Full)</center>', dataIndex: 'DegreeCourse', editor: 'textfield', flex:1.3 },
-						{ header: '<center>Year Graduated<br>(if graduated)</center>', dataIndex: 'YearGraduated', editor: 'textfield', flex:1.3 },
-						{ header: '<center>Highest Grade/<br>Level/<br>Units Earned<br>(Write in Full)</center>', dataIndex: 'HighestGrade', editor: 'textfield', flex:1.3 },
-						{ header: '<center>From</center>', dataIndex: 'FromDate', editor: 'textfield',flex:.5 },
-						{ header: '<center>To</center>', dataIndex: 'ToDate', editor: 'textfield', flex:.5 },
-						{ header: '<center>Scholarship/<br>Academic Honors<br>Received</center>', dataIndex: 'Scholarship', editor: 'textfield', flex:1.5 }
+						{ header: '<center>Name Of School<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'NameofSchool', editor: 'textfield', flex:2.6 },
+						{ header: '<center>Degree/Course<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'DegreeCourse', editor: 'textfield', flex:1.6 },
+						{ header: '<center>Year Graduated<br>(if graduated)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'YearGraduated', editor: 'textfield', flex:1 },
+						{ header: '<center>Highest Grade/<br>Level/<br>Units Earned<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'HighestGrade', editor: 'textfield', flex:1 },
+						{ header: '<center>Inclusive Dates of<br>Attendance</center>', fixed:true, menuDisabled:true, sortable:false,
+							columns: [
+								{
+									header: '<center>From</center>', 
+									dataIndex: 'FromDate', 
+									editor: 'textfield',
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:75 
+								},
+								{ 
+									header: '<center>To</center>', 
+									dataIndex: 'ToDate', 
+									editor: 'textfield', 
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:75 
+								}
+							]
+						},
+						{ header: '<center>Scholarship/<br>Academic Honors<br>Received</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'Scholarship', editor: 'textfield', flex:1.5 }
 						
 					],
 					buttons: [
@@ -729,10 +1196,12 @@ Ext.define('Wizard', {
 							text: 'add',
 							handler: function() 
 							{	
+								var me = this.up('wizard');
+								var rEdit = me.rowEditing();
 								var grid = this.up('grid');
 								var store = grid.getStore();
 								var rowEdit = grid.getPlugin('rowEditingPlugin');
-								console.log(rowEdit);
+								console.log(rEdit);
 								// Create a model instance
 								var r = Ext.create('Education', {
 									NameofSchool:'New', 
@@ -898,7 +1367,7 @@ Ext.define('Wizard', {
 			]
 			
 		},
-				{
+		{
 			title: 'Work Experience',
 				items: [
 				
@@ -1033,7 +1502,7 @@ Ext.define('Wizard', {
 				}
 			]
 		},
-			{
+		{
 			title: 'Voluntary Work',
 					items: [
 				
@@ -1148,6 +1617,7 @@ Ext.define('Wizard', {
 			items: [
 				{
 					xtype: 'grid',
+					itemId:'gridTraining',
 					title: 'Training Programs',
 					collapsible: true,
 					collapsed: false,
@@ -1155,11 +1625,12 @@ Ext.define('Wizard', {
 					store: {
 						xtype: 'store',
 						fields:['TitleofSeminar', 'TrainingFrom', 'TrainingTo', 'NumberofHours','ConductedBy'],
-						data: { 
+						/* data: { 
 							items: [
 								{'TitleofSeminar': 'How to train your Dragon', 'TrainingFrom': '2010', 'TrainingTo': '2010', 'NumberofHours': '240', 'ConductedBy':'DreamWorks Animation'}
 							]
-						},
+						}, */
+						autoLoad: true,
 						proxy: {
 							type: 'memory',
 							reader: {
@@ -1167,13 +1638,34 @@ Ext.define('Wizard', {
 								rootProperty: 'items'
 							}
 						}
+						
 					},
 					columns: [
-						{ header: '<center>Title of Seminar/Conference/Workshop/Short Courses<br>(Write in Full)</center>', dataIndex: 'TitleofSeminar', editor: 'textfield', flex:1.7 },
-						{ header: '<center>From</center>', dataIndex: 'TrainingFrom', editor: 'textfield', flex:.3 },
-						{ header: '<center>To</center>', dataIndex: 'TrainingTo', editor: 'textfield', flex:.3 },
-						{ header: '<center>Number of<br>Hours</center>', dataIndex: 'NumberofHours', editor: 'textfield', flex:.4 },
-						{ header: '<center>Conducted/Sponsored By<br>(Write in Full)</center>', dataIndex: 'ConductedBy', editor: 'textfield', flex:1 }
+						{ header: '<center>Title of Seminar/Conference/Workshop/Short Courses<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'TitleofSeminar', editor: 'textfield', flex:1.7 },
+						{ header: '<center>Inclusive Dates</center>', fixed:true, menuDisabled:true, sortable:false,
+							columns: [
+								{ 
+									header: '<center>From</center>', 
+									dataIndex: 'TrainingFrom', 
+									editor: 'textfield', 
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:100
+								},
+								{ 
+									header: '<center>To</center>', 
+									dataIndex: 'TrainingTo', 
+									editor: 'textfield', 
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:100 
+								}
+							]
+						},
+						{ header: '<center>Number of<br>Hours</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'NumberofHours', editor: 'textfield', flex:.3 },
+						{ header: '<center>Conducted/Sponsored By<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'ConductedBy', editor: 'textfield', flex:1 }
 						
 					],
 					buttons: [
@@ -1231,6 +1723,7 @@ Ext.define('Wizard', {
 			items: [
 				{
 					xtype: 'grid',
+					itemId:'gridSkills',
 					title: 'Special Skills/Hobbies',
 					collapsible: true,
 					collapsed: false,
@@ -1252,7 +1745,7 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>Special Skills/Hobbies</center>', dataIndex: 'SpecialSkills', editor: 'textfield', flex: 2}
+						{ header: '<center>Special Skills/Hobbies</center>',fixed:true, menuDisabled:true, sortable:false, dataIndex: 'SpecialSkills', editor: 'textfield', flex: 2}
 					],
 					buttons: [
 						{
@@ -1299,6 +1792,7 @@ Ext.define('Wizard', {
 				},
 				{
 					xtype: 'grid',
+					itemId:'gridRecognition',
 					title: 'Non-Academic Distinctions/Recognition',
 					collapsible: true,
 					collapsed: true,
@@ -1320,7 +1814,7 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>Non-Academic Distinctions/Recognition<br>(Write in Full)</center>', dataIndex: 'TitleofRecognition', editor: 'textfield', flex: 2},
+						{ header: '<center>Non-Academic Distinctions/Recognition<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'TitleofRecognition', editor: 'textfield', flex: 2},
 						
 						
 					],
@@ -1369,6 +1863,7 @@ Ext.define('Wizard', {
 				},
 				{
 					xtype: 'grid',
+					itemId:'gridOrganization',
 					title: 'Organization',
 					collapsible: true,
 					collapsed: true,
@@ -1390,7 +1885,7 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>Membership in Association/Organization<br>(Write in full)</center>', dataIndex: 'NameofOrganization', editor: 'textfield', flex: 2},
+						{ header: '<center>Membership in Association/Organization<br>(Write in full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'NameofOrganization', editor: 'textfield', flex: 2},
 						
 						
 					],
@@ -1460,346 +1955,357 @@ Ext.define('Wizard', {
 					colspan:2,
 					items:[
 						
+						{
+							xtype: 'label',
+							text: 'Are you related by consaguinity or affinity to any of the following: Within the third degree(for National Government Employees):'+
+							'appointing authority, recommending authority, chief of office/bureau/department or person who has'+
+							'immediate supervision over you in the office, Bureau or Department where you will be appointed?',
+							width:900
+						},
+						{
+							xtype:'fieldcontainer',
+							defaultType: 'radiofield',
+							width:125,
+							layout: 'hbox',
+							items: [
 								{
-									xtype: 'label',
-									text: 'Are you related by consaguinity or affinity to any of the following: Within the third degree(for National Government Employees):'+
-									'appointing authority, recommending authority, chief of office/bureau/department or person who has'+
-									'immediate supervision over you in the office, Bureau or Department where you will be appointed?',
-									width:900
-								},
+									boxLabel  : 'YES',
+									name      : 'national',
+									inputValue: '1',
+									id        : 'radio1',
+								}, 
 								{
-									xtype:'fieldcontainer',
-									defaultType: 'radiofield',
-									width:125,
-									layout: 'hbox',
-									items: [
-										{
-											boxLabel  : 'YES',
-											name      : 'national',
-											inputValue: '1',
-											id        : 'radio1',
-										}, 
-										{
-											boxLabel  : 'NO',
-											name      : 'national',
-											inputValue: '2',
-											id        : 'radio2'
-										}
-									]
-								},
-								{
-									title:'',
-									xtype:'textarea',
-									width:400,
-									fieldLabel:'If YES, give details'
-								},
-							
-						
-						
-								{
-									xtype: 'label',
-									text: 'Are you related by consaguinity or affinity to any of the following: Within the fourth degree(for Local Government Employees):'+
-									'appointing authority or recommending authority where you will be appointed?',
-									width:800
-								},
-								{
-									xtype:'fieldcontainer',
-									defaultType: 'radiofield',
-									width:125,
-									layout: 'hbox',
-									items: [
-										{
-											boxLabel  : 'YES',
-											name      : 'local',
-											inputValue: '1',
-											id        : 'radio3',
-										}, 
-										{
-											boxLabel  : 'NO',
-											name      : 'local',
-											inputValue: '2',
-											id        : 'radio4'
-										}
-									]
-								},
-								{
-									title:'',
-									xtype:'textarea',
-									width:400,
-									fieldLabel:'If YES, give details'
-								},
-								
-						
-						
-								{
-									xtype: 'label',
-									text: 'Have you ever been formally charged?',
-									width:800
-								},
-								{
-									xtype:'fieldcontainer',
-									defaultType: 'radiofield',
-									width:125,
-									layout: 'hbox',
-									items: [
-										{
-											boxLabel  : 'YES',
-											name      : 'charged',
-											inputValue: '1',
-											id        : 'radio5',
-										}, 
-										{
-											boxLabel  : 'NO',
-											name      : 'charged',
-											inputValue: '2',
-											id        : 'radio6'
-										}
-									]
-								},
-								{
-									title:'',
-									xtype:'textarea',
-									width:400,
-									fieldLabel:'If YES, give details'
-								},
-						
-						
-								{
-									xtype: 'label',
-									text: 'Have you ever been guilty of any administrative offense?',
-									width:800
-								},
-								{
-									xtype:'fieldcontainer',
-									defaultType: 'radiofield',
-									width:125,
-									layout: 'hbox',
-									items: [
-										{
-											boxLabel  : 'YES',
-											name      : 'offense',
-											inputValue: '1',
-											id        : 'radio7',
-										}, 
-										{
-											boxLabel  : 'NO',
-											name      : 'offense',
-											inputValue: '2',
-											id        : 'radio8'
-										}
-									]
-								},
-								{
-									title:'',
-									xtype:'textarea',
-									width:400,
-									fieldLabel:'If YES, give details'
-								},
-						
-						
-								{
-									xtype: 'label',
-									text: 'Have you been convicted of any crime or violation of any law, decree, ordinance or '+
-									'regulation by any court or tribunal?',
-									width:800
-								},
-								{
-									xtype:'fieldcontainer',
-									defaultType: 'radiofield',
-									width:125,
-									layout: 'hbox',
-									items: [
-										{
-											boxLabel  : 'YES',
-											name      : 'violation',
-											inputValue: '1',
-											id        : 'radio9',
-										}, 
-										{
-											boxLabel  : 'NO',
-											name      : 'violation',
-											inputValue: '2',
-											id        : 'radio10'
-										}
-									]
-								},
-								{
-									title:'',
-									xtype:'textarea',
-									width:400,
-									fieldLabel:'If YES, give details'
-								},
-						
-						
-								{
-									xtype: 'label',
-									text: 'Have you ever been separated from the service in any of the following modes:'+
-									'resignation, retirement, dropped from the rolls, dismissal, termination, end of term, '+
-									'finished contract, AWOL or phased out in the public or private sector?',
-									width:800
-								},
-								{
-									xtype:'fieldcontainer',
-									defaultType: 'radiofield',
-									width:125,
-									layout: 'hbox',
-									items: [
-										{
-											boxLabel  : 'YES',
-											name      : 'separated',
-											inputValue: '1',
-											id        : 'radio11',
-										}, 
-										{
-											boxLabel  : 'NO',
-											name      : 'separated',
-											inputValue: '2',
-											id        : 'radio12'
-										}
-									]
-								},
-								{
-									title:'',
-									xtype:'textarea',
-									width:400,
-									fieldLabel:'If YES, give details'
-								},
-
-						
-								{
-									xtype: 'label',
-									text: 'Have you ever been a candidate in a national or local election(except Barangay election)?',
-									width:800
-								},
-								{
-									xtype:'fieldcontainer',
-									defaultType: 'radiofield',
-									width:125,
-									layout: 'hbox',
-									items: [
-										{
-											boxLabel  : 'YES',
-											name      : 'candidate',
-											inputValue: '1',
-											id        : 'radio13',
-										}, 
-										{
-											boxLabel  : 'NO',
-											name      : 'candidate',
-											inputValue: '2',
-											id        : 'radio14'
-										}
-									]
-								},
-								{
-									title:'',
-									xtype:'textarea',
-									width:400,
-									fieldLabel:'If YES, give details'
-								},
-								
-						
-								{
-									xtype: 'label',
-									text: 'Pursuant to: (a)Indigenous People\'s Act(RA 8371); (b)Magna Carta for Disabled Persons(RA 7277); '+
-									'and (c)Solo Parents Welfare Act of 2000(RA 8972), Are you a  member of any indigenous group?',
-									width:800
-								},
-								{
-									xtype:'fieldcontainer',
-									defaultType: 'radiofield',
-									width:125,
-									layout: 'hbox',
-									items: [
-										{
-											boxLabel  : 'YES',
-											name      : 'indigenous',
-											inputValue: '1',
-											id        : 'radio15',
-										}, 
-										{
-											boxLabel  : 'NO',
-											name      : 'indigenous',
-											inputValue: '2',
-											id        : 'radio16'
-										}
-									]
-								},
-								{
-									title:'',
-									xtype:'textarea',
-									width:400,
-									fieldLabel:'If YES, give details'
-								},
-						
-								{
-									xtype: 'label',
-									text: 'Are you differently abled?',
-									width:800
-								},
-								{
-									xtype:'fieldcontainer',
-									defaultType: 'radiofield',
-									width:125,
-									layout: 'hbox',
-									items: [
-										{
-											boxLabel  : 'YES',
-											name      : 'abled',
-											inputValue: '1',
-											id        : 'radio17',
-										}, 
-										{
-											boxLabel  : 'NO',
-											name      : 'abled',
-											inputValue: '2',
-											id        : 'radio18'
-										}
-									]
-								},
-								{
-									title:'',
-									xtype:'textarea',
-									width:400,
-									fieldLabel:'If YES, give details'
-								},
-						
-								{
-									xtype: 'label',
-									text: 'Are you a solo parent?',
-									width:800
-								},
-								{
-									xtype:'fieldcontainer',
-									defaultType: 'radiofield',
-									width:125,
-									layout: 'hbox',
-									items: [
-										{
-											boxLabel  : 'YES',
-											name      : 'solo',
-											inputValue: '1',
-											id        : 'radio19',
-										}, 
-										{
-											boxLabel  : 'NO',
-											name      : 'solo',
-											inputValue: '2',
-											id        : 'radio20'
-										}
-									]
-								},
-								{
-									title:'',
-									xtype:'textfield',
-									width:400,
-									fieldLabel:'If YES, give details'
+									boxLabel  : 'NO',
+									name      : 'national',
+									inputValue: '2',
+									id        : 'radio2'
 								}
+							]
+						},
+						{
+							title:'',
+							xtype:'textarea',
+							itemId:'txtThirdDegree',
+							width:400,
+							fieldLabel:'If YES, give details'
+						},
+					
+				
+				
+						{
+							xtype: 'label',
+							text: 'Are you related by consaguinity or affinity to any of the following: Within the fourth degree(for Local Government Employees):'+
+							'appointing authority or recommending authority where you will be appointed?',
+							width:800
+						},
+						{
+							xtype:'fieldcontainer',
+							defaultType: 'radiofield',
+							width:125,
+							layout: 'hbox',
+							items: [
+								{
+									boxLabel  : 'YES',
+									name      : 'local',
+									inputValue: '1',
+									id        : 'radio3',
+								}, 
+								{
+									boxLabel  : 'NO',
+									name      : 'local',
+									inputValue: '2',
+									id        : 'radio4'
+								}
+							]
+						},
+						{
+							title:'',
+							xtype:'textarea',
+							itemId:'txtFourthDegree',
+							width:400,
+							fieldLabel:'If YES, give details'
+						},
+						
+				
+				
+						{
+							xtype: 'label',
+							text: 'Have you ever been formally charged?',
+							width:800
+						},
+						{
+							xtype:'fieldcontainer',
+							defaultType: 'radiofield',
+							width:125,
+							layout: 'hbox',
+							items: [
+								{
+									boxLabel  : 'YES',
+									name      : 'charged',
+									inputValue: '1',
+									id        : 'radio5',
+								}, 
+								{
+									boxLabel  : 'NO',
+									name      : 'charged',
+									inputValue: '2',
+									id        : 'radio6'
+								}
+							]
+						},
+						{
+							title:'',
+							xtype:'textarea',
+							itemId:'txtCharged',
+							width:400,
+							fieldLabel:'If YES, give details'
+						},
+				
+				
+						{
+							xtype: 'label',
+							text: 'Have you ever been guilty of any administrative offense?',
+							width:800
+						},
+						{
+							xtype:'fieldcontainer',
+							defaultType: 'radiofield',
+							width:125,
+							layout: 'hbox',
+							items: [
+								{
+									boxLabel  : 'YES',
+									name      : 'offense',
+									inputValue: '1',
+									id        : 'radio7',
+								}, 
+								{
+									boxLabel  : 'NO',
+									name      : 'offense',
+									inputValue: '2',
+									id        : 'radio8'
+								}
+							]
+						},
+						{
+							title:'',
+							xtype:'textarea',
+							itemId:'txtAdministrative',
+							width:400,
+							fieldLabel:'If YES, give details'
+						},
+				
+				
+						{
+							xtype: 'label',
+							text: 'Have you been convicted of any crime or violation of any law, decree, ordinance or '+
+							'regulation by any court or tribunal?',
+							width:800
+						},
+						{
+							xtype:'fieldcontainer',
+							defaultType: 'radiofield',
+							width:125,
+							layout: 'hbox',
+							items: [
+								{
+									boxLabel  : 'YES',
+									name      : 'violation',
+									inputValue: '1',
+									id        : 'radio9',
+								}, 
+								{
+									boxLabel  : 'NO',
+									name      : 'violation',
+									inputValue: '2',
+									id        : 'radio10'
+								}
+							]
+						},
+						{
+							title:'',
+							xtype:'textarea',
+							itemId:'txtConvicted',
+							width:400,
+							fieldLabel:'If YES, give details'
+						},
+				
+				
+						{
+							xtype: 'label',
+							text: 'Have you ever been separated from the service in any of the following modes:'+
+							'resignation, retirement, dropped from the rolls, dismissal, termination, end of term, '+
+							'finished contract, AWOL or phased out in the public or private sector?',
+							width:800
+						},
+						{
+							xtype:'fieldcontainer',
+							defaultType: 'radiofield',
+							width:125,
+							layout: 'hbox',
+							items: [
+								{
+									boxLabel  : 'YES',
+									name      : 'separated',
+									inputValue: '1',
+									id        : 'radio11',
+								}, 
+								{
+									boxLabel  : 'NO',
+									name      : 'separated',
+									inputValue: '2',
+									id        : 'radio12'
+								}
+							]
+						},
+						{
+							title:'',
+							xtype:'textarea',
+							itemId:'txtSeparated',
+							width:400,
+							fieldLabel:'If YES, give details'
+						},
+
+				
+						{
+							xtype: 'label',
+							text: 'Have you ever been a candidate in a national or local election(except Barangay election)?',
+							width:800
+						},
+						{
+							xtype:'fieldcontainer',
+							defaultType: 'radiofield',
+							width:125,
+							layout: 'hbox',
+							items: [
+								{
+									boxLabel  : 'YES',
+									name      : 'candidate',
+									inputValue: '1',
+									id        : 'radio13',
+								}, 
+								{
+									boxLabel  : 'NO',
+									name      : 'candidate',
+									inputValue: '2',
+									id        : 'radio14'
+								}
+							]
+						},
+						{
+							title:'',
+							xtype:'textarea',
+							itemId:'txtElection',
+							width:400,
+							fieldLabel:'If YES, give details'
+						},
+						
+				
+						{
+							xtype: 'label',
+							text: 'Pursuant to: (a)Indigenous People\'s Act(RA 8371); (b)Magna Carta for Disabled Persons(RA 7277); '+
+							'and (c)Solo Parents Welfare Act of 2000(RA 8972), Are you a  member of any indigenous group?',
+							width:800
+						},
+						{
+							xtype:'fieldcontainer',
+							defaultType: 'radiofield',
+							width:125,
+							layout: 'hbox',
+							items: [
+								{
+									boxLabel  : 'YES',
+									name      : 'indigenous',
+									inputValue: '1',
+									id        : 'radio15',
+								}, 
+								{
+									boxLabel  : 'NO',
+									name      : 'indigenous',
+									inputValue: '2',
+									id        : 'radio16'
+								}
+							]
+						},
+						{
+							title:'',
+							xtype:'textarea',
+							itemId:'txtIndigenous',
+							width:400,
+							fieldLabel:'If YES, give details'
+						},
+				
+						{
+							xtype: 'label',
+							text: 'Are you differently abled?',
+							width:800
+						},
+						{
+							xtype:'fieldcontainer',
+							defaultType: 'radiofield',
+							width:125,
+							layout: 'hbox',
+							items: [
+								{
+									boxLabel  : 'YES',
+									name      : 'abled',
+									inputValue: '1',
+									id        : 'radio17',
+								}, 
+								{
+									boxLabel  : 'NO',
+									name      : 'abled',
+									inputValue: '2',
+									id        : 'radio18'
+								}
+							]
+						},
+						{
+							title:'',
+							xtype:'textarea',
+							itemId:'txtAbled',
+							width:400,
+							fieldLabel:'If YES, give details'
+						},
+				
+						{
+							xtype: 'label',
+							text: 'Are you a solo parent?',
+							width:800
+						},
+						{
+							xtype:'fieldcontainer',
+							defaultType: 'radiofield',
+							width:125,
+							layout: 'hbox',
+							items: [
+								{
+									boxLabel  : 'YES',
+									name      : 'solo',
+									inputValue: '1',
+									id        : 'radio19',
+								}, 
+								{
+									boxLabel  : 'NO',
+									name      : 'solo',
+									inputValue: '2',
+									id        : 'radio20'
+								}
+							]
+						},
+						{
+							title:'',
+							xtype:'textfield',
+							itemId:'txtSolo',
+							width:400,
+							fieldLabel:'If YES, give details'
+						}
 					]
 					
 				},
 				{
 					xtype: 'grid',
+					itemId:'gridReference',
 					title: 'Character Reference <font color="red">(Person not related by consaguinity or affinity to applicant/appointee)</font>',
 					collapsible: true,
 					collapsed: true,
@@ -1886,16 +2392,19 @@ Ext.define('Wizard', {
 					items:[
 						{
 							xtype: 'textfield',
+							itemId:'txtCertificate',
 							fieldLabel: 'Community Tax Certificate No.',
 							padding: '0 0 0 10'
 						},
 						{
 							xtype: 'textfield',
+							itemId:'txtIssuedAt',
 							fieldLabel: 'Issued At',
 							padding: '0 0 0 10'
 						},
 						{
 							xtype: 'datefield',
+							itemId:'dteIssuance',
 							fieldLabel: 'Date of Issuance',
 							padding: '0 0 0 10',
 							width: '35%'
@@ -1917,6 +2426,7 @@ Ext.define('Wizard', {
 					items:[
 						{
 							xtype: 'datefield',
+							itemId:'dteDateAccomplished',
 							fieldLabel: 'Date Accomplished',
 							padding: '0 0 0 10',
 							width: '35%'
