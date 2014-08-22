@@ -88,6 +88,7 @@ var personnelData = {
     }
   ],
   "national": false,
+  "local": false,
   "charReference": [
     {
       "cName": "John SF Fabic",
@@ -244,6 +245,17 @@ Ext.define('Wizard', {
 			});
 		}
 		
+		me.down('#national').setValue(p.national);
+		me.down('#local').setValue(p.local);
+		me.down('#charged').setValue(p.charged);
+		me.down('#offense').setValue(p.offense);
+		me.down('#violation').setValue(p.violation);
+		me.down('#separated').setValue(p.separated);
+		me.down('#candidate').setValue(p.candidate);
+		me.down('#indigenous').setValue(p.indigenous);
+		me.down('#abled').setValue(p.abled);
+		me.down('#solo').setValue(p.solo);
+		
 		var grid6 = me.down('#gridReference');
 		grid6.getStore().removeAll();
 		// load reference
@@ -312,6 +324,15 @@ Ext.define('Wizard', {
 			recognition: me.getRecognition(),
 			organization: me.getOrganization(),
 			national: me.down('#national').getValue(),
+			local: me.down('#local').getValue(),
+			charged: me.down('#charged').getValue(),
+			offense: me.down('#offense').getValue(),
+			violation: me.down('#violation').getValue(),
+			separated: me.down('#separated').getValue(),
+			candidate: me.down('#candidate').getValue(),
+			indigenous: me.down('#indigenous').getValue(),
+			abled: me.down('#abled').getValue(),
+			solo: me.down('#solo').getValue(),
 			charReference: me.getCharRef(),
 			tax: {
 				taxNo:	me.down('#txtCertificate').getValue(),
@@ -2064,8 +2085,8 @@ Ext.define('Wizard', {
 						{
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
-							width:125,
 							itemId:'national',
+							width:125,
 							layout: 'hbox',
 							items: [
 								{
@@ -2112,6 +2133,7 @@ Ext.define('Wizard', {
 						{
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
+							itemId:'local',
 							width:125,
 							layout: 'hbox',
 							items: [
@@ -2127,7 +2149,18 @@ Ext.define('Wizard', {
 									inputValue: '2',
 									id        : 'radio4'
 								}
-							]
+							],
+							getValue: function(){
+								var me = this;
+								return me.down('#radio3').getValue();
+							},
+							setValue: function(value){
+								var me = this;
+								if(value)
+									me.down('#radio3').setValue(true);
+								else
+								me.down('#radio4').setValue(true)
+							}
 						},
 						{
 							title:'',
@@ -2147,6 +2180,7 @@ Ext.define('Wizard', {
 						{
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
+							itemId:'charged',
 							width:125,
 							layout: 'hbox',
 							items: [
@@ -2162,7 +2196,18 @@ Ext.define('Wizard', {
 									inputValue: '2',
 									id        : 'radio6'
 								}
-							]
+							],
+							getValue: function(){
+								var me = this;
+								return me.down('#radio5').getValue();
+							},
+							setValue: function(value){
+								var me = this;
+								if(value)
+									me.down('#radio5').setValue(true);
+								else
+								me.down('#radio6').setValue(true)
+							}
 						},
 						{
 							title:'',
@@ -2181,6 +2226,7 @@ Ext.define('Wizard', {
 						{
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
+							itemId:'offense',
 							width:125,
 							layout: 'hbox',
 							items: [
@@ -2196,7 +2242,18 @@ Ext.define('Wizard', {
 									inputValue: '2',
 									id        : 'radio8'
 								}
-							]
+							],
+							getValue: function(){
+								var me = this;
+								return me.down('#radio7').getValue();
+							},
+							setValue: function(value){
+								var me = this;
+								if(value)
+									me.down('#radio7').setValue(true);
+								else
+								me.down('#radio8').setValue(true)
+							}
 						},
 						{
 							title:'',
@@ -2216,6 +2273,7 @@ Ext.define('Wizard', {
 						{
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
+							itemId:'violation',
 							width:125,
 							layout: 'hbox',
 							items: [
@@ -2231,7 +2289,18 @@ Ext.define('Wizard', {
 									inputValue: '2',
 									id        : 'radio10'
 								}
-							]
+							],
+							getValue: function(){
+								var me = this;
+								return me.down('#radio9').getValue();
+							},
+							setValue: function(value){
+								var me = this;
+								if(value)
+									me.down('#radio9').setValue(true);
+								else
+								me.down('#radio10').setValue(true)
+							}
 						},
 						{
 							title:'',
@@ -2252,6 +2321,7 @@ Ext.define('Wizard', {
 						{
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
+							itemId:'separated',
 							width:125,
 							layout: 'hbox',
 							items: [
@@ -2267,7 +2337,18 @@ Ext.define('Wizard', {
 									inputValue: '2',
 									id        : 'radio12'
 								}
-							]
+							],
+							getValue: function(){
+								var me = this;
+								return me.down('#radio11').getValue();
+							},
+							setValue: function(value){
+								var me = this;
+								if(value)
+									me.down('#radio11').setValue(true);
+								else
+								me.down('#radio12').setValue(true)
+							}
 						},
 						{
 							title:'',
@@ -2286,6 +2367,7 @@ Ext.define('Wizard', {
 						{
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
+							itemId:'candidate',
 							width:125,
 							layout: 'hbox',
 							items: [
@@ -2301,7 +2383,18 @@ Ext.define('Wizard', {
 									inputValue: '2',
 									id        : 'radio14'
 								}
-							]
+							],
+							getValue: function(){
+								var me = this;
+								return me.down('#radio13').getValue();
+							},
+							setValue: function(value){
+								var me = this;
+								if(value)
+									me.down('#radio13').setValue(true);
+								else
+								me.down('#radio14').setValue(true)
+							}
 						},
 						{
 							title:'',
@@ -2321,6 +2414,7 @@ Ext.define('Wizard', {
 						{
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
+							itemId:'indigenous',
 							width:125,
 							layout: 'hbox',
 							items: [
@@ -2336,7 +2430,18 @@ Ext.define('Wizard', {
 									inputValue: '2',
 									id        : 'radio16'
 								}
-							]
+							],
+							getValue: function(){
+								var me = this;
+								return me.down('#radio15').getValue();
+							},
+							setValue: function(value){
+								var me = this;
+								if(value)
+									me.down('#radio15').setValue(true);
+								else
+								me.down('#radio16').setValue(true)
+							}
 						},
 						{
 							title:'',
@@ -2354,6 +2459,7 @@ Ext.define('Wizard', {
 						{
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
+							itemId:'abled',
 							width:125,
 							layout: 'hbox',
 							items: [
@@ -2369,7 +2475,18 @@ Ext.define('Wizard', {
 									inputValue: '2',
 									id        : 'radio18'
 								}
-							]
+							],
+							getValue: function(){
+								var me = this;
+								return me.down('#radio17').getValue();
+							},
+							setValue: function(value){
+								var me = this;
+								if(value)
+									me.down('#radio17').setValue(true);
+								else
+								me.down('#radio18').setValue(true)
+							}
 						},
 						{
 							title:'',
@@ -2387,6 +2504,7 @@ Ext.define('Wizard', {
 						{
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
+							itemId:'solo',
 							width:125,
 							layout: 'hbox',
 							items: [
@@ -2402,7 +2520,18 @@ Ext.define('Wizard', {
 									inputValue: '2',
 									id        : 'radio20'
 								}
-							]
+							],
+							getValue: function(){
+								var me = this;
+								return me.down('#radio19').getValue();
+							},
+							setValue: function(value){
+								var me = this;
+								if(value)
+									me.down('#radio19').setValue(true);
+								else
+								me.down('#radio20').setValue(true)
+							}
 						},
 						{
 							title:'',
