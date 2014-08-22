@@ -14,7 +14,7 @@ var personnelData = {
   "PHILHEALTH": "0000",
   "SSS": "34-2463527-8",
   "eMail": "jcdelmundo@namria.gov.ph",
-  "Cp": "+639334551979",
+  "cellphone": "+639334551979",
   "resAdd": "B5 L9 Ph3 Peace Village, San Luis, Antipolo City",
   "resZip": "1870",
   "resTel": "N\/A",
@@ -87,7 +87,13 @@ var personnelData = {
       "cAdd": "NAMRIA-GISMB",
       "cNum": "884-2851"
     }
-  ]
+  ],
+  "tax": {
+    "taxNo": "Sample",
+    "issuedAt": "Taguig City",
+    "issuedDate": "2014-08-18T16:00:00.000Z"
+  },
+  "dateAccomplished": "2014-08-26T16:00:00.000Z"
 };
 
 Ext.define('Wizard', {
@@ -122,10 +128,14 @@ Ext.define('Wizard', {
 		me.down('#txtFirstname').setValue(p.firstName);
 		me.down('#txtMiddlename').setValue(p.middleName);
 		me.down('#txtNameExtension').setValue(p.nameExtension);
-		me.down('#dteDateofBirth').setValue(p.dateOfBirth);
+		me.down('#dteDateofBirth').setValue(new Date(p.dateOfBirth));
 		me.down('#txtPlaceofBirth').setValue(p.placeOfBirth);
 		me.down('#cboSex').setValue(p.sex);
 		me.down('#cboCivilStatus').setValue(p.civilStatus);
+		me.down('#txtCitizenship').setValue(p.citizenship);
+		me.down('#txtHeight').setValue(p.height);
+		me.down('#txtWeight').setValue(p.weight);
+		me.down('#txtBloodType').setValue(p.bloodType);
 		me.down('#txtNID').setValue(p.NID);
 		me.down('#txtTIN').setValue(p.TIN);
 		me.down('#txtGSIS').setValue(p.GSIS);
@@ -133,7 +143,7 @@ Ext.define('Wizard', {
 		me.down('#txtPhilH').setValue(p.PHILHEALTH);
 		me.down('#txtSSS').setValue(p.SSS);
 		me.down('#txtEmail').setValue(p.eMail);
-		me.down('#txtCp').setValue(p.Cp);
+		me.down('#txtCp').setValue(p.cellphone);
 		me.down('#txtResAdd').setValue(p.resAdd);
 		me.down('#txtResZip').setValue(p.resZip);
 		me.down('#txtResTel').setValue(p.resTel);
@@ -155,7 +165,7 @@ Ext.define('Wizard', {
 			var child = p.children[item];
 			grid.getStore().add({
 				name: child.fullName,
-				dob: child.dateOfBirth
+				dob:  new Date(child.dateOfBirth)
 			});
 		}
 		
@@ -189,8 +199,8 @@ Ext.define('Wizard', {
 			var train = p.training[item];
 			grid2.getStore().add({
 				TitleofSeminar: train.titleOfSeminar,
-				TrainingFrom: train.trainingFrom,
-				TrainingTo: train.trainingTo,
+				TrainingFrom: new Date(train.trainingFrom),
+				TrainingTo: new Date(train.trainingTo),
 				NumberofHours: train.numberOfHours,
 				ConductedBy: train.conductedBy
 			});
@@ -238,10 +248,10 @@ Ext.define('Wizard', {
 				
 			});
 		}
-		me.down('#txtCertificate').setValue(p.tax);
-		me.down('#txtIssuedAt').setValue(p.issuedAt);
-		me.down('#dteIssuance').setValue(p.issuedDate);
-		me.down('#dteDateAccomplished').setValue(p.dateAccomplished);
+		me.down('#txtCertificate').setValue(p.tax.taxNo);
+		me.down('#txtIssuedAt').setValue(p.tax.issuedAt);
+		me.down('#dteIssuance').setValue(new Date(p.tax.issuedDate));
+		me.down('#dteDateAccomplished').setValue(new Date(p.dateAccomplished));
 		
 	},
 	getFormData: function(){
@@ -256,6 +266,10 @@ Ext.define('Wizard', {
 			placeOfBirth: me.down('#txtPlaceofBirth').getValue(),
 			sex: me.down('#cboSex').getValue(),
 			civilStatus: me.down('#cboCivilStatus').getValue(),
+			citizenship: me.down('#txtCitizenship').getValue(),
+			height: me.down('#txtHeight').getValue(),
+			weight: me.down('#txtWeight').getValue(),
+			bloodType: me.down('#txtBloodType').getValue(),
 			NID: me.down('#txtNID').getValue(),
 			TIN: me.down('#txtTIN').getValue(),
 			GSIS: me.down('#txtGSIS').getValue(),
@@ -263,7 +277,7 @@ Ext.define('Wizard', {
 			PHILHEALTH: me.down('#txtPhilH').getValue(),
 			SSS: me.down('#txtSSS').getValue(),
 			eMail: me.down('#txtEmail').getValue(),
-			Cp: me.down('#txtCp').getValue(),
+			cellphone: me.down('#txtCp').getValue(),
 			resAdd: me.down('#txtResAdd').getValue(),
 			resZip: me.down('#txtResZip').getValue(),
 			resTel: me.down('#txtResTel').getValue(),
@@ -289,10 +303,13 @@ Ext.define('Wizard', {
 			skills: me.getSkills(),
 			recognition: me.getRecognition(),
 			organization: me.getOrganization(),
+			national: me.down('#national').getValue(),
 			charReference: me.getCharRef(),
-			tax: me.down('#txtCertificate').getValue(),
-			issuedAt: me.down('#txtIssuedAt').getValue(),
-			issuedDate: me.down('#dteIssuance').getValue(),
+			tax: {
+				taxNo:	me.down('#txtCertificate').getValue(),
+				issuedAt: me.down('#txtIssuedAt').getValue(),
+				issuedDate: me.down('#dteIssuance').getValue()
+			},
 			dateAccomplished: me.down('#dteDateAccomplished').getValue()
 		};
 
@@ -425,7 +442,7 @@ Ext.define('Wizard', {
 		Ext.define('Education',{
 			extend:'Ext.data.Model',
 			fields:[
-				'NameofSchool', 'DegreeCourse', 'YearGraduated', 'HighestGrade', 'FromDate', 'ToDate', 'Scholarship'
+				'Level','NameofSchool', 'DegreeCourse', 'YearGraduated', 'HighestGrade', 'FromDate', 'ToDate', 'Scholarship'
 			]
 		});
 		//Model for trainings
@@ -464,7 +481,7 @@ Ext.define('Wizard', {
 			]
 		});
 		//model for Civil Service Eligibility
-		 Ext.define('CSEligibility', {
+		Ext.define('CSEligibility', {
 			extend: 'Ext.data.Model',
 			fields: [
 				{ header: 'CseCareer'},
@@ -634,9 +651,9 @@ Ext.define('Wizard', {
 									itemId:'cboCivilStatus',
 									fieldLabel: 'Civil status',
 									store: ['Single','Married','Annulled','Widowed','Separated','Others'],
-									labelWidth: 120,
+									labelWidth: 80,
 									padding: '0 0 0 10',
-									flex: 2.5,
+									flex: 1,
 									editable: false,
 									listeners: {
 										select: function(){
@@ -677,6 +694,49 @@ Ext.define('Wizard', {
 											}
 										}
 									}
+								},
+								// CITIZENSHIP
+								{
+									xtype: 'textfield',
+									itemId:'txtCitizenship',
+									fieldLabel: 'Citizenship',
+									labelWidth: 80,
+									emptyText: 'Filipino',
+									padding: '0 0 0 10',
+									flex: 1
+									
+								}
+							]
+						},
+						{
+							xtype: 'fieldcontainer',
+							layout: 'hbox',
+							items: [
+								// HEIGHT
+								{
+									xtype: 'textfield',
+									itemId:'txtHeight',
+									fieldLabel: 'Height',
+									flex: 1
+									
+								},
+								//WEIGHT
+								{
+									xtype: 'textfield',
+									itemId:'txtWeight',
+									fieldLabel: 'Weight',
+									padding: '0 0 0 10',
+									labelWidth:80,
+									flex: 1
+								},
+								//BLOOD TYPE
+								{
+									xtype: 'textfield',
+									itemId:'txtBloodType',
+									fieldLabel: 'Blood Type',
+									padding: '0 0 0 10',
+									labelWidth:80,
+									flex: 1
 								}
 							]
 						}
@@ -863,7 +923,7 @@ Ext.define('Wizard', {
 						},
 						// ZIP CODE
 						{
-							xtype: 'textfield',
+							xtype: 'numberfield',
 							itemId:'txtResZip',
 							fieldLabel: 'Zip code',
 							padding: '0 0 0 10'
@@ -901,7 +961,7 @@ Ext.define('Wizard', {
 						},
 						// ZIP CODE
 						{
-							xtype: 'textfield',
+							xtype: 'numberfield',
 							itemId:'txtPerZip',
 							fieldLabel: 'Zip code',
 							padding: '0 0 0 10'
@@ -1008,18 +1068,17 @@ Ext.define('Wizard', {
 					    }
 					},
 					columns: [
-				        { header: '<center>Name Of Child</center>',  dataIndex: 'name', editor: 'textfield', flex: 2},
+				        { header: '<center>NAME OF CHILD (Write full name and list all)</center>',  dataIndex: 'name', editor: 'textfield', flex: 2},
 				        { xtype: 'datecolumn', 
-							header: '<center>Date Of Birth</center>', 
+							header: '<center>DATE OF BIRTH</center>', 
 							dataIndex: 'dob', 
 							width: 135,
 							editor: {
-								xtype: 'datefield',
+								xtype: 'datefield' ,
 								allowBlank: false,
 								format: 'm/d/Y',
 								minValue: '01/01/1950',
-								minText: 'Cannot have a start date before the company existed!',
-								maxValue: Ext.Date.format(new Date(), 'm/d/Y')
+								maxValue: Ext.Date.format(new Date(), 'm/d/Y') 
 							},
 							flex: 1 }
 				    ],
@@ -1147,7 +1206,7 @@ Ext.define('Wizard', {
 					margin: '20 40 20 20',
 					store: {
 						xtype: 'store',
-						fields:['NameofSchool', 'DegreeCourse', 'YearGraduated', 'HighestGrade','FromDate', 'ToDate', 'Scholarship'],
+						fields:['Level','NameofSchool', 'DegreeCourse', 'YearGraduated', 'HighestGrade','FromDate', 'ToDate', 'Scholarship'],
 						data: { 
 							items: [
 								
@@ -1162,11 +1221,12 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>Name Of School<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'NameofSchool', editor: 'textfield', flex:2.6 },
-						{ header: '<center>Degree/Course<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'DegreeCourse', editor: 'textfield', flex:1.6 },
-						{ header: '<center>Year Graduated<br>(if graduated)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'YearGraduated', editor: 'textfield', flex:1 },
-						{ header: '<center>Highest Grade/<br>Level/<br>Units Earned<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'HighestGrade', editor: 'textfield', flex:1 },
-						{ header: '<center>Inclusive Dates of<br>Attendance</center>', fixed:true, menuDisabled:true, sortable:false,
+						{header: '<center>LEVEL</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'Level', },
+						{ header: '<center>NAME OF SCHOOL<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'NameofSchool', editor: 'textfield', flex:2.6 },
+						{ header: '<center>DEGREE/COURSE<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'DegreeCourse', editor: 'textfield', flex:1.6 },
+						{ header: '<center>YEAR GRADUATED<br>(if graduated)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'YearGraduated', editor: 'textfield', flex:1 },
+						{ header: '<center>HIGHEST GRADE/<br>LEVEL/<br>UNITS EARNED<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'HighestGrade', editor: 'textfield', flex:1 },
+						{ header: '<center>INCLUSIVE DATES OF<br>ATTENDANCE</center>', fixed:true, menuDisabled:true, sortable:false,
 							columns: [
 								{
 									header: '<center>From</center>', 
@@ -1188,7 +1248,7 @@ Ext.define('Wizard', {
 								}
 							]
 						},
-						{ header: '<center>Scholarship/<br>Academic Honors<br>Received</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'Scholarship', editor: 'textfield', flex:1.5 }
+						{ header: '<center>SCHOLARSHIP/<br>ACADEMIC HONORS<br>RECEIVED</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'Scholarship', editor: 'textfield', flex:1.5 }
 						
 					],
 					buttons: [
@@ -1641,13 +1701,19 @@ Ext.define('Wizard', {
 						
 					},
 					columns: [
-						{ header: '<center>Title of Seminar/Conference/Workshop/Short Courses<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'TitleofSeminar', editor: 'textfield', flex:1.7 },
-						{ header: '<center>Inclusive Dates</center>', fixed:true, menuDisabled:true, sortable:false,
+						{ header: '<center>TITLE OF SEMINAR/CONFERENCE/WORKSHOP/<br>SHORT COURSES<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'TitleofSeminar', editor: 'textfield', flex:1.7 },
+						{ header: '<center>INCLUSIVE DATES OF ATTENDANCE</center>', fixed:true, menuDisabled:true, sortable:false,
 							columns: [
 								{ 
 									header: '<center>From</center>', 
+									xtype: 'datecolumn',
 									dataIndex: 'TrainingFrom', 
-									editor: 'textfield', 
+									editor: {
+										xtype: 'datefield',
+										allowBlank: false,
+										format: 'm/d/Y',
+										maxValue: Ext.Date.format(new Date(), 'm/d/Y')
+									},
 									fixed:true, 
 									menuDisabled:true, 
 									sortable:false,
@@ -1655,8 +1721,14 @@ Ext.define('Wizard', {
 								},
 								{ 
 									header: '<center>To</center>', 
+									xtype: 'datecolumn',
 									dataIndex: 'TrainingTo', 
-									editor: 'textfield', 
+									editor: {
+										xtype: 'datefield',
+										allowBlank: false,
+										format: 'm/d/Y',
+										maxValue: Ext.Date.format(new Date(), 'm/d/Y')
+									},
 									fixed:true, 
 									menuDisabled:true, 
 									sortable:false,
@@ -1664,8 +1736,8 @@ Ext.define('Wizard', {
 								}
 							]
 						},
-						{ header: '<center>Number of<br>Hours</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'NumberofHours', editor: 'textfield', flex:.3 },
-						{ header: '<center>Conducted/Sponsored By<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'ConductedBy', editor: 'textfield', flex:1 }
+						{ header: '<center>NUMBER OF<br>HOURS</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'NumberofHours', editor: 'textfield', flex:.3 },
+						{ header: '<center>CONDUCTED/SPONSORED BY<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'ConductedBy', editor: 'textfield', flex:1 }
 						
 					],
 					buttons: [
@@ -1745,7 +1817,7 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>Special Skills/Hobbies</center>',fixed:true, menuDisabled:true, sortable:false, dataIndex: 'SpecialSkills', editor: 'textfield', flex: 2}
+						{ header: '<center>SPECIAL SKILLS/HOBBIES</center>',fixed:true, menuDisabled:true, sortable:false, dataIndex: 'SpecialSkills', editor: 'textfield', flex: 2}
 					],
 					buttons: [
 						{
@@ -1814,7 +1886,7 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>Non-Academic Distinctions/Recognition<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'TitleofRecognition', editor: 'textfield', flex: 2},
+						{ header: '<center>NON-ACADEMIC DISTINCTIONS/RECOGNITION<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'TitleofRecognition', editor: 'textfield', flex: 2},
 						
 						
 					],
@@ -1885,7 +1957,7 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{ header: '<center>Membership in Association/Organization<br>(Write in full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'NameofOrganization', editor: 'textfield', flex: 2},
+						{ header: '<center>MEMBERSHIP IN ASSOCIATION/ORGANIZATION<br>(Write in full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'NameofOrganization', editor: 'textfield', flex: 2},
 						
 						
 					],
@@ -1966,21 +2038,33 @@ Ext.define('Wizard', {
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
 							width:125,
+							itemId:'national',
 							layout: 'hbox',
 							items: [
 								{
 									boxLabel  : 'YES',
 									name      : 'national',
 									inputValue: '1',
-									id        : 'radio1',
+									itemId    : 'radio1',
 								}, 
 								{
 									boxLabel  : 'NO',
 									name      : 'national',
 									inputValue: '2',
-									id        : 'radio2'
+									itemId    : 'radio2'
 								}
-							]
+							],
+							getValue: function(){
+								var me = this;
+								return me.down('#radio1').getValue();
+							},
+							setValue: function(value){
+								var me = this;
+								if(value)
+									me.down('#radio1').setValue(true);
+								else
+								me.down('#radio2').setValue(true)
+							}
 						},
 						{
 							title:'',
@@ -2306,7 +2390,7 @@ Ext.define('Wizard', {
 				{
 					xtype: 'grid',
 					itemId:'gridReference',
-					title: 'Character Reference <font color="red">(Person not related by consaguinity or affinity to applicant/appointee)</font>',
+					title: 'Character Reference',
 					collapsible: true,
 					collapsed: true,
 					margin: '20 40 20 20',
@@ -2326,10 +2410,16 @@ Ext.define('Wizard', {
 							}
 						}
 					},
+					tbar:[
+						{
+							xtype: 'label',
+							html: '<font color="red">(Person not related by consaguinity or affinity to applicant/appointee)</font>'
+						}
+					],
 					columns: [
-						{ header: '<center>Name</center>', dataIndex: 'cReference', editor: 'textfield', flex: 2},
-						{ header: '<center>Address</center>', dataIndex: 'Address', editor: 'textfield', flex: 2},
-						{ header: '<center>Tel. No.</center>', dataIndex: 'cNumber', editor: 'textfield', flex: 1}
+						{ header: '<center>NAME</center>', dataIndex: 'cReference', editor: 'textfield', flex: 2},
+						{ header: '<center>ADDRESS</center>', dataIndex: 'Address', editor: 'textfield', flex: 2},
+						{ header: '<center>TEL. NO.</center>', dataIndex: 'cNumber', editor: 'textfield', flex: 1}
 						
 					],
 					buttons: [
@@ -2394,20 +2484,23 @@ Ext.define('Wizard', {
 							xtype: 'textfield',
 							itemId:'txtCertificate',
 							fieldLabel: 'Community Tax Certificate No.',
+							labelWidth:210,
 							padding: '0 0 0 10'
 						},
 						{
 							xtype: 'textfield',
 							itemId:'txtIssuedAt',
 							fieldLabel: 'Issued At',
+							labelWidth:210,
 							padding: '0 0 0 10'
 						},
 						{
 							xtype: 'datefield',
 							itemId:'dteIssuance',
 							fieldLabel: 'Date of Issuance',
+							labelWidth:210,
 							padding: '0 0 0 10',
-							width: '35%'
+							width: '40%'
 						}
 					]
 					
@@ -2428,8 +2521,9 @@ Ext.define('Wizard', {
 							xtype: 'datefield',
 							itemId:'dteDateAccomplished',
 							fieldLabel: 'Date Accomplished',
+							labelWidth:210,
 							padding: '0 0 0 10',
-							width: '35%'
+							width: '40%'
 						}
 					]
 				}
