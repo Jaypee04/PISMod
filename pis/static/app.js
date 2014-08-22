@@ -3,10 +3,14 @@ var personnelData = {
   "firstName": "Jaypee",
   "middleName": "Catague",
   "nameExtension": "N\/A",
-  "dateOfBirth": "1989-09-21",
+  "dateOfBirth": "1989-09-20T16:00:00.000Z",
   "placeOfBirth": "Quezon City",
   "sex": "M",
   "civilStatus": "Single",
+  "citizenship": "",
+  "height": "",
+  "weight": "",
+  "bloodType": "",
   "NID": "12-0008",
   "TIN": "282 196 168",
   "GSIS": "2003397303",
@@ -16,10 +20,10 @@ var personnelData = {
   "eMail": "jcdelmundo@namria.gov.ph",
   "cellphone": "+639334551979",
   "resAdd": "B5 L9 Ph3 Peace Village, San Luis, Antipolo City",
-  "resZip": "1870",
+  "resZip": 1870,
   "resTel": "N\/A",
   "perAdd": "B5 L9 Ph3 Peace Village, San Luis, Antipolo City",
-  "perZip": "1870",
+  "perZip": 1870,
   "perTel": "N\/A",
   "spSurname": "N\/A",
   "spFirstname": "N\/A",
@@ -39,6 +43,7 @@ var personnelData = {
   "motMiddlename": "Trinidad",
   "education": [
     {
+      "level": "Elementary",
       "schoolName": "Marian School of Antipolo, Inc.",
       "degree": "Elementary",
       "yearGraduated": "2002",
@@ -48,6 +53,7 @@ var personnelData = {
       "scholarship": ""
     },
     {
+      "level": "Highschool",
       "schoolName": "Don Antonio de Zuzuarregui, Sr. Memorial Academy",
       "degree": "High School",
       "yearGraduated": "2006",
@@ -60,8 +66,8 @@ var personnelData = {
   "training": [
     {
       "titleOfSeminar": "Training on Advanced GIS",
-      "trainingFrom": "03\/04\/2013",
-      "trainingTo": "03\/08\/2013",
+      "trainingFrom": "2013-03-03T16:00:00.000Z",
+      "trainingTo": "2013-03-07T16:00:00.000Z",
       "numberOfHours": "40",
       "conductedBy": "NAMRIA-GTC"
     }
@@ -81,6 +87,7 @@ var personnelData = {
       "org": "O.N.E"
     }
   ],
+  "national": false,
   "charReference": [
     {
       "cName": "John SF Fabic",
@@ -182,6 +189,7 @@ Ext.define('Wizard', {
 		for(item in p.education){
 			var educ = p.education[item];
 			grid1.getStore().add({
+				Level: educ.level,
 				NameofSchool: educ.schoolName,
 				DegreeCourse: educ.degree,
 				YearGraduated: educ.yearGraduated,
@@ -343,6 +351,7 @@ Ext.define('Wizard', {
 		
 		grid.getStore().data.each(function(row) {
 			education.push({ 
+				level: row.data['Level'],
 				schoolName: row.data['NameofSchool'], 
 				degree: row.data['DegreeCourse'],
 				yearGraduated: row.data['YearGraduated'],
@@ -1221,7 +1230,25 @@ Ext.define('Wizard', {
 						}
 					},
 					columns: [
-						{header: '<center>LEVEL</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'Level', },
+						{ header: '<center>LEVEL</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'Level',
+							editor   : {xtype:'combo', 
+							store: new Ext.data.ArrayStore({
+                               fields: ['level'],
+                               data : 
+								[                                         
+								   ['Elementary'],['Highschool'], ['Vocational/Trade Course'], ['College'],['Graduate Studies']
+								   
+                                ]
+                            }),
+							displayField:'level',
+							valueField: 'level',
+							mode: 'local',
+							typeAhead: false,
+							triggerAction: 'all',
+							lazyRender: true,
+							emptyText: 'Select level'
+                        }
+						},
 						{ header: '<center>NAME OF SCHOOL<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'NameofSchool', editor: 'textfield', flex:2.6 },
 						{ header: '<center>DEGREE/COURSE<br>(Write in Full)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'DegreeCourse', editor: 'textfield', flex:1.6 },
 						{ header: '<center>YEAR GRADUATED<br>(if graduated)</center>', fixed:true, menuDisabled:true, sortable:false, dataIndex: 'YearGraduated', editor: 'textfield', flex:1 },
@@ -2034,7 +2061,6 @@ Ext.define('Wizard', {
 							'immediate supervision over you in the office, Bureau or Department where you will be appointed?',
 							width:900
 						},
-						/*
 						{
 							xtype:'fieldcontainer',
 							defaultType: 'radiofield',
@@ -2065,35 +2091,6 @@ Ext.define('Wizard', {
 									me.down('#radio1').setValue(true);
 								else
 								me.down('#radio2').setValue(true)
-							}
-						},
-						*/
-						{
-							xtype: 'fieldcontainer',
-							defaultType: 'radiofield',
-							itemId: 'national',
-							items: [
-								{
-									itemId: 'yes',
-									boxLabel: 'Yes',
-									name: 'national'
-								},
-								{
-									itemId: 'no',
-									boxLabel: 'No',
-									name: 'national'
-								}
-							],
-							getValue: function(){
-								var me = this;
-								return me.down('#yes').getValue();
-							},
-							setValue: function(value){
-								var me = this;
-								if(value)
-									me.down('#yes').setValue(true);
-								else
-									me.down('#no').setValue(true)
 							}
 						},
 						{
