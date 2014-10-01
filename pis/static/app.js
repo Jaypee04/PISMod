@@ -104,6 +104,75 @@ var personnelData = {
   "dateAccomplished": "2014-08-26T16:00:00.000Z"
 };
 
+var personnelNoData = {
+  "surName": "",
+  "firstName": "",
+  "middleName": "",
+  "nameExtension": "",
+  "dateOfBirth": "",
+  "placeOfBirth": "",
+  "sex": "",
+  "civilStatus": "",
+  "citizenship": "",
+  "height": "",
+  "weight": "",
+  "bloodType": "",
+  "NID": "",
+  "TIN": "",
+  "GSIS": "",
+  "PAGIBIG": "",
+  "PHILHEALTH": "",
+  "SSS": "",
+  "eMail": "",
+  "cellphone": "",
+  "resAdd": "",
+  "resZip": 0,
+  "resTel": "",
+  "perAdd": "",
+  "perZip": 0,
+  "perTel": "",
+  "spSurname": "",
+  "spFirstname": "",
+  "spMiddlename": "",
+  "spOccu": "",
+  "spEmployer": "",
+  "spBusAdd": "",
+  "spBusTel": "",
+  "children": [
+    
+  ],
+  "fatSurname": "",
+  "fatFirstname": "",
+  "fatMiddlename": "",
+  "motSurname": "",
+  "motFirstname": "",
+  "motMiddlename": "",
+  "education": [
+    
+  ],
+  "training": [
+    
+  ],
+  "skills": [
+    
+  ],
+  "recognition": [
+    
+  ],
+  "organization": [
+    
+  ],
+  "charReference": [
+    
+  ],
+  "tax": {
+    "taxNo": "",
+    "issuedAt": "",
+    "issuedDate": ""
+  },
+  "dateAccomplished": ""
+};
+
 Ext.define('Wizard', {
 	
 	alias: 'widget.wizard',
@@ -115,8 +184,27 @@ Ext.define('Wizard', {
 			text: 'Save',
 			handler: function(){
 				var me = this.up('wizard');
-				me.getFormData();
-				//me.getChildren();
+				var personnel = me.getFormData();
+				
+				//Send the personnel data to server.js
+				Ext.Ajax.request({
+					url: '/employees',
+					method: 'POST',
+					jsonData: {
+						personnelInfo: personnel
+					},
+					success: function(response){
+						//var Employee = Ext.decode(response.responseText);
+						//Ext.Msg.alert('Data Captured:', Employee.personnelData);
+						//console.log(Employee.personnelData);
+					},
+					failure: function(response){
+						Ext.Msg.alert('Error', response.status);
+						console.log(response.status);
+					}
+				
+				});
+				//
 			}
 		},
 		{
@@ -125,6 +213,51 @@ Ext.define('Wizard', {
 			handler: function(){
 				var me = this.up('wizard');
 				me.loadFormData(personnelData);
+			}
+		},
+		'->',
+		'-',
+		{
+			xtype: 'textfield',
+			fieldLabel: 'Search NAMRIA ID',
+			labelWidth:140,
+			maxLength:7,
+			maxLengthText:'Maximum of 7 digits/character only',
+			emptyText:'00-0000',
+			itemId:'txtSearch'
+		}, 
+		{
+			xtype: 'button',
+			text: 'Search',
+			handler: function(){
+				var me = this.up('wizard');
+				var NamriaID = me.down('#txtSearch').getValue();
+				
+				//Get the personnel data using NAMRIA ID to server.js
+				Ext.Ajax.request({
+					url: '/employees/'+NamriaID,
+					method: 'GET',
+					success: function(response){
+						var Employee = Ext.decode(response.responseText);
+						if(Employee==null)
+						{
+							Ext.Msg.alert('Not Found', 'No record found');
+							me.loadFormData(personnelNoData);
+							console.log(Employee);
+						}
+						else
+						{
+							me.loadFormData(Employee);
+							console.log(Employee);
+						}
+					},
+					failure: function(response){
+						Ext.Msg.alert('Error', response.status);
+						console.log(response.status);
+					}
+				
+				});
+				
 			}
 		}
 		
@@ -136,7 +269,15 @@ Ext.define('Wizard', {
 		me.down('#txtFirstname').setValue(p.firstName);
 		me.down('#txtMiddlename').setValue(p.middleName);
 		me.down('#txtNameExtension').setValue(p.nameExtension);
-		me.down('#dteDateofBirth').setValue(new Date(p.dateOfBirth));
+		if (p.dateOfBirth == null)
+		{
+			var currentDate = new Date().format('Y-m-d');
+			me.down('#dteDateofBirth').setValue(currentDate);
+		}
+		else
+		{
+			me.down('#dteDateofBirth').setValue(new Date(p.dateOfBirth));
+		}
 		me.down('#txtPlaceofBirth').setValue(p.placeOfBirth);
 		me.down('#cboSex').setValue(p.sex);
 		me.down('#cboCivilStatus').setValue(p.civilStatus);
@@ -273,7 +414,7 @@ Ext.define('Wizard', {
 		me.down('#dteIssuance').setValue(new Date(p.tax.issuedDate));
 		me.down('#dteDateAccomplished').setValue(new Date(p.dateAccomplished));
 		
-	},
+	}, 
 	getFormData: function(){
 		var me = this;
 		
@@ -341,9 +482,9 @@ Ext.define('Wizard', {
 			},
 			dateAccomplished: me.down('#dteDateAccomplished').getValue()
 		};
-
-		console.log(JSON.stringify(personnel));
-	
+		return personnel;
+		//console.log(JSON.stringify(personnel));
+		
 		
 	},
 	getChildren: function(){
@@ -792,30 +933,47 @@ Ext.define('Wizard', {
 							items: [
 								{
 									xtype: 'fileuploadfield',
-									id: 'filedata',
+									itemId: 'fileData',
 									margin:5,
 									emptyText: 'Select an image to upload...',
 									fieldLabel: 'File Path',
 									width:380,
-									buttonText: 'Browse'
+									buttonText: 'Browse',
+									listeners: {
+										change: function(fld, value) {
+											console.log(value);
+											var newValue = value.replace(/C:\\fakepath\\/g, '');
+											console.log(newValue);
+											fld.setRawValue(newValue);
+											
+										}
+									}
 								},
 								{
-									xtype:"image",
+									xtype:'button',
+									text:'Upload',
+									width:150,
+									margin:5,
+									handler: function(){
+										var me = this.up('fieldcontainer');
+										var fileValue = me.down('#fileData').getValue();
+										console.log(fileValue);
+									}
+								},
+								{
+									xtype:'image',
 									height: 200,
 									width: 200,
+									align:'east',
 									style: {
-										"background-position": "0 0"
+										'background-position': '0 0'
 									},
-									src: 'http://placehold.it/200x200'
+									src: 'http://placehold.it/200x200&text=Your PDS Picture here'
 								}
 								
 							]
-						},
-						{
-							xtype:'button',
-							text:'Upload',
-							width:385
 						}
+						
 						
 					]
 				},
