@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>PIS Mod</title>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="ext/packages/ext-theme-crisp-touch/build/resources/ext-theme-crisp-touch-all-debug.css">
+	
+		
+		<!-- JS -->
+		<script type="text/javascript" src="ext/ext-all.js"></script>
+
+		
+		
+		
+		<!-- Main -->
+		<script>
+			
+		Ext.onReady(function() {
+		   
+			Ext.create('Ext.container.Viewport', {
+				layout: {
+					type: 'vbox',
+					align: 'center',
+					pack: 'center'
+				},
+				items: {
+					xtype: 'form',
+					url: '/login',
+					title: 'PISMod Login',
+					frame:true,
+					width: 340,
+					bodyPadding: 10,
+					
+					defaultType: 'textfield',
+					defaults: {
+						anchor: '100%'
+					},
+					
+					items: [
+						{
+							allowBlank: false,
+							fieldLabel: 'User name',
+							name: 'username',
+							emptyText: 'username'
+						},
+						{
+							allowBlank: false,
+							fieldLabel: 'Password',
+							name: 'password',
+							emptyText: 'password',
+							inputType: 'password'
+						}
+					],
+					
+					buttons: [
+						{ 
+							text:'Login',
+							handler: function() {
+								var form = this.up('form').getForm();
+								console.log(form);
+								if (form.isValid()) {
+									form.submit({
+										success: function(form, action) {
+											location.href = '/';
+										},
+										failure: function(form, action) {
+											console.log(action);
+											Ext.Msg.alert('Failed', action.response.responseText);//result.msg);
+										}
+									});
+								}
+							}
+							
+						}
+					]
+				}
+				
+				
+			});
+			
+		});
+	
+		</script>
+	</head>
+	<body></body>
+</html>

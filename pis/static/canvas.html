@@ -1,0 +1,52 @@
+<html>
+
+<body>
+	<input type="file" id="fileUpload"></input>
+	<textarea id="result"></textarea>
+</body>
+
+
+<script>
+
+	function loadImage(){
+
+		var v1 = document.getElementById('fileUpload');
+
+		
+		v1.addEventListener('change', function(e){
+		
+			//var canvas = document.getElementById("c");
+			var canvas = document.createElement('canvas');
+			var context = canvas.getContext("2d");
+		
+			var URL = window.webkitURL || window.URL;
+			var url = URL.createObjectURL(e.target.files[0]);
+			var img = new Image();
+			img.src = url;
+			
+			img.onload = function(){
+				var img_W = img.width;
+				var img_H = img.height;
+				canvas.width = img_W;
+				canvas.height = img_H;
+				context.drawImage(img,0,0,img_W, img_H);
+				
+				var img_str = canvas.toDataURL();
+				console.log(img_str);
+				
+				var result = document.getElementById("result");
+				result.value = img_str;
+			}
+			
+			
+		});
+
+	}
+	loadImage();
+
+
+</script>
+
+
+
+</html>

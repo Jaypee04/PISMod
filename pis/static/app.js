@@ -194,9 +194,7 @@ Ext.define('Wizard', {
 						personnelInfo: personnel
 					},
 					success: function(response){
-						//var Employee = Ext.decode(response.responseText);
-						//Ext.Msg.alert('Data Captured:', Employee.personnelData);
-						//console.log(Employee.personnelData);
+						Ext.Msg.alert('Success', 'Employee record has been added!');
 					},
 					failure: function(response){
 						Ext.Msg.alert('Error', response.status);
@@ -259,7 +257,27 @@ Ext.define('Wizard', {
 				});
 				
 			}
-		}
+		},
+		{
+			xtype: 'button',
+			text: 'Logout',
+			handler: function(){
+				Ext.Ajax.request({
+					url: '/logout',
+					method: 'GET',
+					success: function(response){
+						
+						Ext.Msg.alert('Successful', 'Successfully logout!');
+						location.href = '/';
+					},
+					failure: function(response){
+						Ext.Msg.alert('Error', response.status);
+						console.log(response.status);
+					}
+				 
+				});
+			}
+		} 
 		
 	],
 	loadFormData: function(p){
@@ -652,42 +670,24 @@ Ext.define('Wizard', {
 			]
 		});
 		//model for Civil Service Eligibility
-		Ext.define('CSEligibility', {
+		 Ext.define('CSEligibility', {
 			extend: 'Ext.data.Model',
 			fields: [
-				{ header: 'CseCareer'},
-				{ header: 'CseRating'},
-				{ header: 'CseDate'},
-				{ header: 'CsePlace'},
-				{ header: 'CseNumber' },
-				{ header: 'CseDor' }
+				 'CseCareer','CseRating','CseDate','CsePlace','CseNumber','CseDor' 	
 			]
 		}); 
 		//model for Work Experience
 		Ext.define('WorkExp', {
 			extend: 'Ext.data.Model',
 			fields: [
-				{ header: 'workExFrom' },
-				{ header: 'workExTo' },
-				{ header: 'workExPosition'},
-				{ header: 'workExDep' },
-				{ header: 'workExMnth'},
-				{ header: 'workExSal' },
-				{ header: 'workExMnth' },
-				{ header: 'workExGovt'} 
-	
+				 'workExFrom','workExTo','workExPosition','workExDep','workExSal','workExMnth','workExGovt'
 			]
 		}); 
 		//Voluntary Work 
 		Ext.define('VwWork', {
 			extend: 'Ext.data.Model',
 			fields: [
-				{ header: 'VwName' },
-				{ header: 'VwFrom' },
-				{ header: 'VwTo'},
-				{ header: 'VwNumbers' },
-				{ header: 'VwPosition'}
-				
+				 'VwName','VwFrom','VwTo', 'VwNumbers','VwPosition'		
 			]
 		}); 
 		
@@ -926,10 +926,12 @@ Ext.define('Wizard', {
 					defaults: {
 						width: '100%'
 					},
+					
+					
 					items:[
 						{
 							xtype: 'fieldcontainer',
-							layout: 'hbox',
+							layout: 'vbox',
 							items: [
 								{
 									xtype: 'fileuploadfield',
@@ -938,27 +940,57 @@ Ext.define('Wizard', {
 									emptyText: 'Select an image to upload...',
 									fieldLabel: 'File Path',
 									width:380,
-									buttonText: 'Browse',
-									listeners: {
-										change: function(fld, value) {
-											console.log(value);
-											var newValue = value.replace(/C:\\fakepath\\/g, '');
-											console.log(newValue);
-											fld.setRawValue(newValue);
-											
-										}
-									}
+									buttonText: 'Browse'
 								},
 								{
 									xtype:'button',
 									text:'Upload',
+									itemId:'btnUpload',
 									width:150,
 									margin:5,
 									handler: function(){
 										var me = this.up('fieldcontainer');
 										var fileValue = me.down('#fileData').getValue();
 										console.log(fileValue);
+										
+										var canvas = document.createElement('canvas');   
+										if (canvas.getContext) {
+											// Get the context for the canvas
+											 var ctx = canvas.getContext("2d"); 
+											// Get the data as an image.             
+											 var img_str = canvas.toDataURL("image/png");     
+										}
+									   
+										// Get the image object
+										var imageElement = fileValue;
+										// Set the src to data from the canvas 
+										imageElement.src = img_str;   
+										console.log(img_str);
+										var result = me.down('#txtImage').setValue(img_str);
+										
+										/* var canvas = document.createElement('canvas');  
+										var context = canvas.getContext('2d');
+										var img = fileValue;
+										
+										
+										img.onload = function(){
+											var img_W = img.width;
+											var img_H = img.height;
+											canvas.width = img_W;
+											canvas.height = img_H;
+											context.drawImage(img,0,0,img_W, img_H);
+											
+										}
+										img.src = img_str;
+										var img_str = canvas.toDataURL();
+										console.log(img_str);
+										var result = me.down('#txtImage').setValue(img_str); */
+										
 									}
+								},
+								{
+									xtype: 'textarea',
+									itemId:'txtImage'
 								},
 								{
 									xtype:'image',
@@ -1519,7 +1551,7 @@ Ext.define('Wizard', {
 				{
 					autoScroll:true,
 					xtype: 'grid',
-					//layout: 'fit',
+					itemId: 'gridCSE',
 					collapsible: true,
 					//collapsed: true,
 					margin: '20 40 20 20',
@@ -1527,11 +1559,11 @@ Ext.define('Wizard', {
 					 store: {
 						xtype: 'store',
 					    fields:['CseCareer', 'CseRating', 'CseDate', 'CsePlace', 'CseNumber','CseDor'],
-					    data: { 
+					 /*   data: { 
 							items: [
-								{'CseCareer': '', 'CseRating': '','CseDate': '','CsePlace': '','CseNumber': '','CseDor': ''},
+								{CseCareer: '', CseRating: '',CseDate: '',CsePlace: '',CseNumber: '',CseDor: ''},
 							]     
-					    },
+					    },  */
 					    proxy: {
 					        type: 'memory',
 					        reader: {
@@ -1546,43 +1578,83 @@ Ext.define('Wizard', {
 							header: '<center>CAREER SERVICE/RA 1080 (BOARD/BAR) <br> UNDER SPECIAL LAWS/CES/CSEE<\center>', 
 								autoScroll:true,
 								dataIndex: 'CseCareer', 
-								editor:'textfield',
-									flex: 2
+								editor: 'textfield', 
+								fixed:true, 
+								menuDisabled:true, 
+								sortable:false,
+								flex: 2,
+								//emptyText: "No Record to Display"
+							
 						},
 				        { 
 							header: '<center>RATING<\center>', 
 								dataIndex: 'CseRating', 
-								editor:'textfield',
-									flex: .6 
+								editor: 'textfield', 
+								fixed:true, 
+								menuDisabled:true, 
+								sortable:false,
+								flex: .6 
 						},
 				        {
-							header: '<center>DATE OF EXAMINATION<br>/CONFERMENT<\center>',
+							header: '<center>DATE OF EXAMINATION/<br>CONFERMENT<\center>',
 								dataIndex: 'CseDate', 
-								editor:'textfield',	
-									flex: 1.2 
-										},
+								editor: 'textfield', 
+								fixed:true, 
+								menuDisabled:true, 
+								sortable:false,	
+								flex: 1.2 
+						},
 						{
-							header: '<center>PLACE OF EXAMINATION<br>/CONFERMENT<\center>', 
+							header: '<center>PLACE OF EXAMINATION/<br>CONFERMENT<\center>', 
 								dataIndex: 'CsePlace', 
-								editor:'textfield',
-									flex: 1.2 
+								editor: 'textfield', 
+								fixed:true, 
+								menuDisabled:true, 
+								sortable:false,
+								flex: 1.2 
 						},
-						{
-							header: '<center>NUMBER<\center>', 
-								dataIndex: 'CseNumber', 
-								editor:'textfield',	
-									flex: .5
-						},
-						{
-							header: '<center>DATE OF RELEASE<\center> ', 
-								dataIndex: 'CseDor', 
-								editor:'textfield',	
-									flex: 1 
-									//width: 60
+						{ header: '<center>LICENSE(if applicable)</center>', fixed:true, menuDisabled:true, sortable:false,
+							columns: [
+								{
+									header: '<center>Number</center>', 
+									dataIndex: 'CseNumber', 
+									editor: 'textfield',
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:80
+								 
+								},
+								/* { 
+									header: '<center>Date of Release</center>', 
+									dataIndex: 'CseDor', 
+									editor: 'textfield', 
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:150
+								} */
+								{ 
+									header: '<center>Date of Release</center>', 
+									xtype: 'datecolumn',
+									dataIndex: 'CseDor', 
+									editor: {
+										xtype: 'datefield',
+										allowBlank: false,
+										format: 'm/d/Y',
+										maxValue: Ext.Date.format(new Date(), 'm/d/Y')
+									},
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:150
+								},
+								
+							]
 						},
 				    ],
 					
-					buttons: [
+			 		buttons: [
 						{
 							text: 'add',
 							handler: function() 
@@ -1593,18 +1665,15 @@ Ext.define('Wizard', {
 								console.log(rowEdit);
 								// Create a model instance
 								var r = Ext.create('CSEligibility', {
-									TitleofSeminar: 'New Training',
-									TrainingFrom:'',
-									TrainingTo:'', 
-									NumberofHours:'',
-									ConductedBy:''
-									
+								
 								}); 
 								
 								store.add(r);
 								rowEdit.startEdit(grid.getStore().getData().getCount()-1, 0);
 							}
 						},
+						//xx
+						
 						{
 							text: 'remove',
 							handler: function() 
@@ -1621,7 +1690,9 @@ Ext.define('Wizard', {
 							},
 							disabled: false
 						}
-					],
+						
+					],  
+							
 					plugins: [
 						Ext.create('Ext.grid.plugin.RowEditing', {
 							pluginId: 'rowEditingPlugin',
@@ -1640,6 +1711,7 @@ Ext.define('Wizard', {
 				// work experience
 				{
 					xtype: 'grid',
+					itemId: 'gridWE',
 					collapsible: true,
 					//collapsed: true,
 					margin: '20 40 20 20',
@@ -1647,13 +1719,13 @@ Ext.define('Wizard', {
 					store: {
 						xtype: 'store',
 					    fields:['workExFrom', 'workExTo', 'workExPosition','workExDep','workExMnth','workExSal','workExStat','workExGovt'],
-					    data: { 
+					 /*    data: { 
 							items: [
-								{'workExFrom':'', 'workExTo':'', 'workExPosition':'','workExDep':'','workExMnth':'','workExSal':'','workExStat':'','workExGovt':''},
-								
+								{workExFrom:'', workExTo:'',workExPosition:'',workExDep:'',workExMnth:'',workExSal:'',workExStat:'',workExGovt:''},
+	
 							]
 					        
-					    },
+					    }, */
 					    proxy: {
 					        type: 'memory',
 					        reader: {
@@ -1662,54 +1734,113 @@ Ext.define('Wizard', {
 					        }
 					    }
 					},
-					columns: [
-				        { 
-							text: '<center>From<br>(mm/dd/yyyy)<\center>', 
-								dataIndex: 'workExFrom', 
-								editor:'textfield',	
-									flex: .8
-						},
-				        { 
-							text: '<center>To<br>(mm/dd/yyyy)<\center>',
-								dataIndex: 'workExTo', 
-								editor:'textfield',	
-									flex: .8 
-						},
+					columns: [			 
+						{ header: '<center>INCLUSIVE DATES</center>', fixed:true, menuDisabled:true, sortable:false,
+							columns: [
+								/* {
+									header: '<center>From</center>', 
+									dataIndex: 'workExFrom', 
+									editor: 'textfield',
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:80
+								 
+								}, */
+								{ 
+									header: '<center>From</center>', 
+									xtype: 'datecolumn',
+									dataIndex: 'workExFrom', 
+									editor: {
+										xtype: 'datefield',
+										allowBlank: false,
+										format: 'm/d/Y',
+										maxValue: Ext.Date.format(new Date(), 'm/d/Y')
+									},
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:80
+								},
+								/* { 
+									header: '<center>To</center>', 
+									dataIndex: 'workExTo', 
+									editor: 'textfield', 
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:80
+								} */
+								{ 
+									header: '<center>To</center>', 
+									xtype: 'datecolumn',
+									dataIndex: 'workExTo', 
+									editor: {
+										xtype: 'datefield',
+										allowBlank: false,
+										format: 'm/d/Y',
+										maxValue: Ext.Date.format(new Date(), 'm/d/Y')
+									},
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:80
+								}
+							]
+						},	
 				        {
-							text: '<center>POSITION<br>TITLE <br>(Write in full) <\center>', 
+							header: '<center>POSITION<br>TITLE <br>(Write in full) <\center>', 
 								dataIndex: 'workExPosition', 
-								editor:'textfield',	
-									flex: .8 
+								editor: 'textfield', 
+								fixed:true, 
+								menuDisabled:true, 
+								sortable:false,
+								flex: .8 
 						},
 						{ 
-							text: '<center>DEPARTMENT/AGENCY<br>/OFFICE/COMPANY<\center>', 
+							header: '<center>DEPARTMENT/AGENCY/<br>OFFICE/COMPANY <br>(Write in full)<\center>', 
 								dataIndex: 'workExDep', 
-								editor:'textfield',	
-									flex: 1.5 
+								editor: 'textfield', 
+								fixed:true, 
+								menuDisabled:true, 
+								sortable:false,
+								flex: 1.5 
 						},
 						{ 
-							text: '<center>MONTHLY<br>SALARY<\center>', 
+							header: '<center>MONTHLY<br>SALARY<\center>', 
 								dataIndex: 'workExMnth', 
-								editor:'textfield',	
-									flex: .8 
+								editor: 'textfield', 
+								fixed:true, 
+								menuDisabled:true, 
+								sortable:false,
+								flex: .8 
 						},
 						{ 
-							text: '<center>SALARY GRADE &<br>STEP INCREMENT<br>(Format 00-0)<\center>', 
+							header: '<center>SALARY GRADE &<br>STEP INCREMENT<br>(Format 00-0)<\center>', 
 								dataIndex: 'workExSal', 
-								editor:'textfield',	
-									flex: 1.3 
+								editor: 'textfield', 
+								fixed:true, 
+								menuDisabled:true, 
+								sortable:false,
+								flex: 1.3 
 						},
 						{
-							text: '<center>STATUS <br>OF APPOINTMENT<\center>', 
+							header: '<center>STATUS <br>OF APPOINTMENT<\center>', 
 								dataIndex: 'workExStat', 
-								editor:'textfield',	
-									flex: 1.2 
+								editor: 'textfield', 
+								fixed:true, 
+								menuDisabled:true, 
+								sortable:false,
+								flex: 1.2 
 						},
 						{ 
-							text: '<center>GOVT SERVICE <br>(YES/NO)<\center>', 
+							header: '<center>GOVT SERVICE <br>(YES/NO)<\center>', 
 								dataIndex: 'workExGovt', 
-								editor:'textfield',	
-									flex: 1 
+								editor: 'textfield', 
+								fixed:true, 
+								menuDisabled:true, 
+								sortable:false,
+								flex: 1 
 						}
 				    ],
 					selType: 'rowmodel',
@@ -1768,13 +1899,14 @@ Ext.define('Wizard', {
 				}
 			]
 		},
-		{
+	{
 			title: 'Voluntary Work',
 					items: [
 				
 				// Voluntary Work
 				{
 					xtype: 'grid',
+					itemId: 'gridVW',
 					collapsible: true,
 					//collapsed: true,
 					margin: '20 40 20 20',
@@ -1782,12 +1914,12 @@ Ext.define('Wizard', {
 					store: {
 						xtype: 'store',
 					    fields:['VwName', 'VwFrom', 'VwTo', 'VwNumbers', 'VwPosition'],
-					    data: { 
+					   /*  data: { 
 							items: [
-								{'VwName': '', 'VwFrom': '', 'VwTo': '', 'VwNumbers': '', 'VwPosition':' '}
+								{VwName: '', VwFrom: '', VwTo: '', VwNumbers: '', VwPosition:' '},
 							]
 					        
-					    },
+					    }, */
 					    proxy: {
 					        type: 'memory',
 					        reader: {
@@ -1797,36 +1929,87 @@ Ext.define('Wizard', {
 					    }
 					},
 					columns: [
-				        { text: '<center>NAME & ADDRESS OF ORGANIZATION<br>(Write in full)<\center>',
-							editor:'textfield',
-								dataIndex: 'VwName', 
-								flex: 1.5
+				        { header: '<center>NAME & ADDRESS OF ORGANIZATION<br>(Write in full)<\center>',
+							dataIndex: 'VwName',
+							editor: 'textfield', 
+							fixed:true, 
+							menuDisabled:true, 
+							sortable:false,
+							flex: 1.5
 						},
-						{ 
-							text: '<center>From<br>(mm/dd/yyyy)<\center>', 
-								editor:'textfield',
-								dataIndex: 'VwFrom', 
-									flex: .7 
-									
-						},
-						{ 
-							text: '<center>To<br>(mm/dd/yyyy)<\center>', 
-								editor:'textfield',
-								dataIndex: 'VwTo', 
-									flex: .7 
-						},
-						{ 
-							text: '<center>NUMBERS OF HOURS<\center>', 
-								editor:'textfield',
-								dataIndex: 'VwNumbers', 
-									flex: 1 
-						},
-						{ 
-							text: '<center>POSITION / NATURE OF WORK<\center>', 
-								editor:'textfield',
-								dataIndex: 'VwPosition', 
-									flex: 1.5 
+						{ header: '<center>INCLUSIVE DATES</center>', fixed:true, menuDisabled:true, sortable:false,
+							columns: [
+								/* {
+									header: '<center>From</center>', 
+									dataIndex: 'VwFrom', 
+									editor: 'textfield',
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:80
+								 
+								}, */
+								{ 
+									header: '<center>From</center>', 
+									xtype: 'datecolumn',
+									dataIndex: 'VwFrom', 
+									editor: {
+										xtype: 'datefield',
+										allowBlank: false,
+										format: 'm/d/Y',
+										maxValue: Ext.Date.format(new Date(), 'm/d/Y')
 									},
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:80
+								},
+								/* { 
+									header: '<center>To</center>', 
+									dataIndex: 'VwTo', 
+									editor: 'textfield', 
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:80
+								} */
+								{ 
+									header: '<center>To</center>', 
+									xtype: 'datecolumn',
+									dataIndex: 'VwTo', 
+									editor: {
+										xtype: 'datefield',
+										allowBlank: false,
+										format: 'm/d/Y',
+										maxValue: Ext.Date.format(new Date(), 'm/d/Y')
+									},
+									fixed:true, 
+									menuDisabled:true, 
+									sortable:false,
+									width:80
+								},
+								
+								
+							]
+						},
+						{ 
+							header: '<center>NUMBER OF HOURS<\center>', 
+								dataIndex: 'VwNumbers', 
+								editor: 'textfield', 
+								fixed:true, 
+								menuDisabled:true, 
+								sortable:false,
+								flex: 1 
+						},
+						{ 
+							header: '<center>POSITION / NATURE OF WORK<\center>', 								
+								dataIndex: 'VwPosition', 
+								editor: 'textfield', 
+								fixed:true, 
+								menuDisabled:true, 
+								sortable:false,
+								flex: 1.5 
+						},
 					 ],
 					buttons: [
 						{
