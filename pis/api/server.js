@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieParser()); // required before session.
 app.use(session({ 
-	secret: 'g30p0rt@l',
+	secret: 'p1s',
 	resave: true,
 	saveUninitialized: true
 }));
@@ -38,14 +38,12 @@ startServer();
 
 
 //=============== FUNCTIONS ============//
+
+//Function that authenticates user
 function setAuthentication(){
 
 	app.engine('html', require('ejs').renderFile);
 	
-	var users = [
-		{ id: 1, username: 'jay', password: 'XXXX' },
-	    { id: 2, username: 'joe', password: 'yyyy' }
-	];
 	
 
 	function findById(id, fn) {
@@ -65,28 +63,39 @@ function setAuthentication(){
 		}
 	  }
 	  return fn(null, null);
-	}
+	} 
 	
 	function ensureAuthenticated(req, res, next) {
-	  if (req.isAuthenticated()) { return next(); }
-	  
-		res.sendFile('/login.html', {root: __dirname + '/../static'});
+		console.log(req.isAuthenticated());
+		if (req.isAuthenticated()) { return next(); }
+	  	res.sendFile('/login.html', {root: __dirname + '/../static'});
 	}
 
 	//use windows strategy here instead of local strategy
 	passport.use(new WindowsStrategy({
 		ldap: {
-			url:             'ldap://namria.gov.ph/OU=NAMRIA,DC=namria,DC=gov,DC=ph',
+			url:             'ldap://192.168.8.11/OU=NAMRIA,DC=namria,DC=gov,DC=ph',
 			base:            'OU=NAMRIA,DC=namria,DC=gov,DC=ph',
 			bindDN:          'auth',
 			bindCredentials: 'p@$$w0rd'
-		}
+		},
+		integrated:false,
 	}, 
+	
 	function(profile, done){
+		//console.log(profile, done);
 		
-		User.findOrCreate({ waId: profile.id }, function (err, user) {
+		if(profile)
+			{
+				done(null, profile)
+			}
+		else
+			{
+				done(null, false, { message: 'Login Error!' });
+			}
+		/*User.findOrCreate({ waId: profile.id }, function (err, user) {
 			done(err, user);
-		});
+		});*/
 	}));
 	
 	/* passport.use(new LocalStrategy(
@@ -111,32 +120,53 @@ function setAuthentication(){
 		  })
 		});
 	  }
-	)); */
+	));  */
 
 	passport.serializeUser(function(user, done) {
-	  done(null, user.id);
+	  done(null, user);
+	  console.log(user);
 	});
 
-	passport.deserializeUser(function(id, done) {
-	  findById(id, function (err, user) {
+	passport.deserializeUser(function(user, done) {
+	  /*findById(id, function (err, user) {
 		done(err, user);
-	  });
+	  });*/
+	  //var user = {id:user};
+	  done(null, user);
+	  console.log('from deserialize', user);
 	});
 	
-	app.post('/login', function(req, res, next) {
-		console.log('login',req);
+	app.post('/login',
+		passport.authenticate('WindowsAuthentication'), 
+		function(req,res){
+			if(req.user)
+			{
+				res.json({success:true,user:req.user});
+			}
+			else
+			{
+				res.json({success:false});
+			}
+			
+			//res.json({success:false, user:req.user});
+			
+		}
+	);
+	
+	/* app.post('/login', function(req, res, next) {
 		passport.authenticate('WindowsAuthentication', function(err, user, info) {
+		console.log(err, user, info);
 			if (err) { return next(err) }
 			if (!user) {
-				return res.json({success: false}); //, msg: info.message});
+				return res.json({success: false});//, msg: info.message});
 			}
 			req.login(user, function(err) {
-				console.log(user);
+				
 				if (err) { return next(err); }
 				return res.json({success: true, msg: 'Valid user!'});
 			});
 		})(req, res, next);
-	});
+	}); */
 	
 	app.get('/', ensureAuthenticated, function(req, res){
 		res.sendFile('/index.html', {root: __dirname + '/../static'});
@@ -153,6 +183,7 @@ function setAuthentication(){
 	
 }
 
+//Function that set the routes
 function setRoutes(){
 	// test routes
 	app.get('/test', function(req, res){

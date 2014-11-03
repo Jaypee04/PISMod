@@ -918,6 +918,7 @@ Ext.define('Wizard', {
 				{
 					xtype: 'panel',
 					title: 'Employee Picture',
+					html:'<html></html>',
 					layout: 'anchor',
 					collapsible: true,
 					collapsed: true,
@@ -940,53 +941,38 @@ Ext.define('Wizard', {
 									emptyText: 'Select an image to upload...',
 									fieldLabel: 'File Path',
 									width:380,
-									buttonText: 'Browse'
-								},
-								{
-									xtype:'button',
-									text:'Upload',
-									itemId:'btnUpload',
-									width:150,
-									margin:5,
-									handler: function(){
-										var me = this.up('fieldcontainer');
-										var fileValue = me.down('#fileData').getValue();
-										console.log(fileValue);
-										
-										var canvas = document.createElement('canvas');   
-										if (canvas.getContext) {
-											// Get the context for the canvas
-											 var ctx = canvas.getContext("2d"); 
-											// Get the data as an image.             
-											 var img_str = canvas.toDataURL("image/png");     
-										}
-									   
-										// Get the image object
-										var imageElement = fileValue;
-										// Set the src to data from the canvas 
-										imageElement.src = img_str;   
-										console.log(img_str);
-										var result = me.down('#txtImage').setValue(img_str);
-										
-										/* var canvas = document.createElement('canvas');  
-										var context = canvas.getContext('2d');
-										var img = fileValue;
-										
-										
-										img.onload = function(){
-											var img_W = img.width;
-											var img_H = img.height;
-											canvas.width = img_W;
-											canvas.height = img_H;
-											context.drawImage(img,0,0,img_W, img_H);
+									buttonText: 'Browse',
+									listeners:{
+										afterrender:function(a){
+											var elem = a.getEl().dom;
+											var me = this.up('fieldcontainer');
+											elem.addEventListener('change', function(e){
+												console.log(e.target.files[0]);
+												var canvas = document.createElement('canvas');  
+												var context = canvas.getContext('2d');
+												var img = new Image();
+												var URL = window.webkitURL || window.URL;
+												var url = URL.createObjectURL(e.target.files[0]);
+												img.src = url;
+												
+												img.onload = function(){
+													var img_W = img.width;
+													var img_H = img.height;
+													canvas.width = img_W;
+													canvas.height = img_H;
+													context.drawImage(img,0,0,img_W, img_H);
+													
+													var img_str = canvas.toDataURL();
+													console.log(img_str);
+													
+													var result = me.down('#txtImage').setValue(img_str);
+													
+												}
+											});
 											
 										}
-										img.src = img_str;
-										var img_str = canvas.toDataURL();
-										console.log(img_str);
-										var result = me.down('#txtImage').setValue(img_str); */
-										
 									}
+			
 								},
 								{
 									xtype: 'textarea',
