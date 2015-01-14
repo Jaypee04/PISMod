@@ -27,7 +27,7 @@
 				},
 				items: {
 					xtype: 'form',
-					url: '/login',
+					url: '/login', //'./login',
 					title: 'PISMod Login',
 					frame:true,
 					width: 340,
@@ -43,14 +43,24 @@
 							allowBlank: false,
 							fieldLabel: 'User name',
 							name: 'username',
+							itemId:'txtUsername',
 							emptyText: 'username'
 						},
 						{
 							allowBlank: false,
 							fieldLabel: 'Password',
 							name: 'password',
+							itemId:'txtPassword',
 							emptyText: 'password',
 							inputType: 'password'
+						},
+						{
+							xtype: 'label',
+							autoEl:{
+								tag: 'a',
+								href: '/',
+								html: 'Get an account.'
+							}
 						}
 					],
 					
@@ -58,16 +68,19 @@
 						{ 
 							text:'Login',
 							handler: function() {
-								var form = this.up('form').getForm();
-								console.log(form);
+								
+								var formRef = this.up('form');
+								var form = formRef.getForm();
 								if (form.isValid()) {
 									form.submit({
+										//waitMsg: 'Authenticating...', 
 										success: function(form, action) {
-											location.href = '/';
+											var username = formRef.down('#txtUsername').getValue();
+											location.href = '/?u=' + username; //'./';
 										},
 										failure: function(form, action) {
-											//console.log(action);
-											Ext.Msg.alert('Failed');//, result.msg);
+											Ext.Msg.alert('Failed', 'Invalid Login!');//, result.msg);
+											formRef.down('#txtPassword').setValue('');
 										}
 									});
 								}
