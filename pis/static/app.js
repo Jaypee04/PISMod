@@ -90,7 +90,7 @@ Ext.define('Wizard', {
 						personnelInfo: personnel
 					},
 					success: function(response){
-						Ext.Msg.alert('Success', 'Employee record has been added!');
+						Ext.Msg.alert('Success', 'Employee record has been updated!');
 					},
 					failure: function(response){
 						console.log(response.statusText);
@@ -447,9 +447,9 @@ Ext.define('Wizard', {
 				
 			});
 		}
-		me.down('#txtCertificate').setValue(p.tax.taxNo);
-		me.down('#txtIssuedAt').setValue(p.tax.issuedAt);
-		me.down('#dteIssuance').setValue(new Date(p.tax.issuedDate));
+		me.down('#txtCertificate').setValue(p.taxNo);
+		me.down('#txtIssuedAt').setValue(p.issuedAt);
+		me.down('#dteIssuance').setValue(new Date(p.issuedDate));
 		me.down('#dteDateAccomplished').setValue(new Date(p.dateAccomplished));
 		
 	}, 
@@ -469,7 +469,7 @@ Ext.define('Wizard', {
 			height: me.down('#txtHeight').getValue(),
 			weight: me.down('#txtWeight').getValue(),
 			bloodType: me.down('#txtBloodType').getValue(),
-			picture: me.down('#txtImage').getValue(),
+			//picture: me.down('#txtImage').getValue(),
 			NID: me.down('#txtNID').getValue(),
 			TIN: me.down('#txtTIN').getValue(),
 			GSIS: me.down('#txtGSIS').getValue(),
@@ -525,12 +525,10 @@ Ext.define('Wizard', {
 			abled: me.down('#abled').getValue(),
 			solo: me.down('#solo').getValue(),
 			charReference: me.getCharRef(),
-			/* tax: {
-				taxNo:	me.down('#txtCertificate').getValue(),
-				issuedAt: me.down('#txtIssuedAt').getValue(),
-				issuedDate: me.down('#dteIssuance').getValue()
-			},
-			dateAccomplished: me.down('#dteDateAccomplished').getValue() */
+			taxNo:	me.down('#txtCertificate').getValue(),
+			issuedAt: me.down('#txtIssuedAt').getValue(),
+			issuedDate: me.down('#dteIssuance').getValue(),
+			dateAccomplished: me.down('#dteDateAccomplished').getValue() 
 		};
 		return personnel;
 		//console.log(JSON.stringify(personnel));
@@ -1761,7 +1759,7 @@ Ext.define('Wizard', {
 									dataIndex: 'CseDor', 
 									editor: {
 										xtype: 'datefield',
-										allowBlank: false,
+										allowBlank: true,
 										format: 'm/d/Y',
 										maxValue: Ext.Date.format(new Date(), 'm/d/Y')
 									},

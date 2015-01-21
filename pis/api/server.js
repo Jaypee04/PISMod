@@ -161,12 +161,10 @@ function setRoutes(){
 			database: 'PIS'
 			
 		}
-		//var data=JSON.parse(req.body.personnelInfo);
-		
 		
 		var connection = new mssql.Connection(config, function(err) {
 			var ps = new mssql.PreparedStatement(connection);
-			//ps.input('DoB', mssql.DateTime));
+			/* ps.input('DoB', mssql.Date);
 			ps.input('IDP', mssql.VarChar(mssql.MAX));
 			ps.input('PoB', mssql.VarChar(50));
 			ps.input('sex', mssql.VarChar(2));
@@ -205,10 +203,17 @@ function setRoutes(){
 			ps.input('mother_f', mssql.VarChar(50));
 			ps.input('mother_m', mssql.VarChar(50));
 			ps.input('mother_l', mssql.VarChar(50));
+			ps.input('tax_no', mssql.VarChar(50));
+			ps.input('tax_place', mssql.VarChar(50));
+			ps.input('tax_date', mssql.Date);
+			ps.input('date_accomplished', mssql.Date);
 			
-			ps.prepare("UPDATE EMP_DTL SET birth_prov=@PoB, sex_c=@sex, civil_stat=@civilStatus, height=@height, weight=@weight, blood_t=@bloodType, tin=@tin, gsis_id_no=@GSIS, pag_ibig=@PAGIBIG, ph_no=@PHILHEALTH, sss_no=@SSS, cel_no=@cellphone, email=@eMail, addr_st=@residentialSt, addr_mun=@residentialMun, addr_prov=@residentialProv, tel_no=@residentialTel, addr_zp=@residentialZip, paddr_st=@provincialSt, paddr_mun=@provincialMun,paddr_prov=@provincialProv,ptel_no=@provincialTel,paddr_zp=@provincialZip, s_first=@spouse_f,s_middle=@spouse_m,s_last=@spouse_l,spouse_occ=@spouse_occu,bus_name=@spouse_empl,bus_add=@spouse_emplAdd,bus_tel=@spouse_emplTel, f_first=@father_f,f_middle=@father_m,f_last=@father_l,m_first=@mother_f,m_middle=@mother_m,m_last=@mother_l where emp_id=@NamriaID", function(err) {
+			ps.prepare("UPDATE EMP_DTL SET birth_date=@DoB, birth_prov=@PoB, sex_c=@sex, civil_stat=@civilStatus, height=@height, weight=@weight, blood_t=@bloodType, tin=@tin, gsis_id_no=@GSIS, pag_ibig=@PAGIBIG, ph_no=@PHILHEALTH, sss_no=@SSS, cel_no=@cellphone, email=@eMail, addr_st=@residentialSt, addr_mun=@residentialMun, addr_prov=@residentialProv, tel_no=@residentialTel, addr_zp=@residentialZip, paddr_st=@provincialSt, paddr_mun=@provincialMun,paddr_prov=@provincialProv,ptel_no=@provincialTel,paddr_zp=@provincialZip, s_first=@spouse_f,s_middle=@spouse_m,s_last=@spouse_l,spouse_occ=@spouse_occu,bus_name=@spouse_empl,bus_add=@spouse_emplAdd,bus_tel=@spouse_emplTel, f_first=@father_f,f_middle=@father_m,f_last=@father_l,m_first=@mother_f,m_middle=@mother_m,m_last=@mother_l, ctc_no=@tax_no, ctc_place=@tax_place, ctc_date=@tax_date,pds_accomp=@date_accomplished where emp_id=@NamriaID", function(err) {
 				//console.log(err);
 				var p = req.body.personnelInfo;
+				var dOB = new Date(p.dateOfBirth);
+				var taxdate = new Date(p.issuedDate);
+				var dateaccomplished = new Date(p.dateAccomplished);
 				var address = p.resAdd.split(',');
 				var p_address = p.perAdd.split(',');
 				var resSt = address[0];	
@@ -217,16 +222,58 @@ function setRoutes(){
 				var provSt = p_address[0]; 
 				var provMun = p_address[1]; 
 				var provProv = p_address[2];
-				ps.execute({PoB:p.placeOfBirth, sex:p.sex, civilStatus:p.civilStatus, height:p.height, weight:p.weight, bloodType:p.bloodType, tin:p.TIN, GSIS:p.GSIS, PAGIBIG:p.PAGIBIG, PHILHEALTH:p.PHILHEALTH, SSS:p.SSS, cellphone:p.cellphone, eMail:p.eMail, residentialSt:resSt,residentialMun:resMun,residentialProv:resProv,residentialTel:p.resTel,residentialZip:p.resZip, provincialSt:provSt,provincialMun:provMun,provincialProv:provProv,provincialTel:p.perTel,provincialZip:p.perZip,spouse_f:p.spFirstname,spouse_m:p.spMiddlename,spouse_l:p.spSurname,spouse_occu:p.spOccu,spouse_empl:p.spEmployer,spouse_emplAdd:p.spBusAdd,spouse_emplTel:p.spBusTel, father_f:p.fatFirstname,father_m:p.fatMiddlename,father_l:p.fatSurname, mother_f:p.motFirstname,mother_m:p.motMiddlename,mother_l:p.motSurname, NamriaID:p.NID}, function(err, recordset) {
-					console.dir(err);
+				
+				ps.execute({DoB:dOB,PoB:p.placeOfBirth, sex:p.sex, civilStatus:p.civilStatus, height:p.height, weight:p.weight, bloodType:p.bloodType, tin:p.TIN, GSIS:p.GSIS, PAGIBIG:p.PAGIBIG, PHILHEALTH:p.PHILHEALTH, SSS:p.SSS, cellphone:p.cellphone, eMail:p.eMail, residentialSt:resSt,residentialMun:resMun,residentialProv:resProv,residentialTel:p.resTel,residentialZip:p.resZip, provincialSt:provSt,provincialMun:provMun,provincialProv:provProv,provincialTel:p.perTel,provincialZip:p.perZip,spouse_f:p.spFirstname,spouse_m:p.spMiddlename,spouse_l:p.spSurname,spouse_occu:p.spOccu,spouse_empl:p.spEmployer,spouse_emplAdd:p.spBusAdd,spouse_emplTel:p.spBusTel, father_f:p.fatFirstname,father_m:p.fatMiddlename,father_l:p.fatSurname, mother_f:p.motFirstname,mother_m:p.motMiddlename,mother_l:p.motSurname, tax_no:p.taxNo,tax_place:p.issuedAt,tax_date:taxdate,date_accomplished:dateaccomplished, NamriaID:p.NID}, function(err, recordset) {
+					//console.dir(err);
+					
+			
 					ps.unprepare(function(err) {
-						console.log("Record Updated.");
+						console.log("Record has been updated.");
 						res.json({success:true});
 					});
 				});
-			});
+			}); */
+			/*
+			for(var i=0;i<p.eligibility.length;i++)
+				{
+					var Title = p.eligibility[i].eligTitle;
+					console.log(Title);
+				}
+			*/
 			
-
+			//Update Eligibility
+			var p = req.body.personnelInfo;
+			ps.input('careerTitle', mssql.NVarChar(35));
+			ps.input('careerRating', mssql.Decimal(18, 2));
+			ps.input('careerPlace', mssql.NVarChar(30));
+			ps.input('NamriaID', mssql.VarChar(50));
+			
+				
+				ps.prepare("INSERT INTO ELIG (EMP_ID,EXAM_T,[RATING], EXAM_PLACE) VALUES (@NamriaID,@careerTitle,@careerRating,@careerPlace)", function(err){
+					for(item in p.eligibility){
+						var e = p.eligibility[item];
+						var CseCareer = e.eligTitle;
+						var CseRating = e.eligRating;
+						//var CseDate = e.eligDate.split('/');
+						//var CseDateMonth = cseDate[0];
+						//var CseDateDay = cseDate[1];
+						//var CseDateYear = cseDate[2];
+						var CsePlace = e.eligPlace;
+						//var CseNumber = e.eligLicenseNumber;
+						//var CseDor = e.eligDateOfRelease;
+					
+					
+					
+						ps.execute({careerTitle:CseCareer, careerRating:CseRating, careerPlace:CsePlace, NamriaID:p.NID},function(err, recordset){
+							ps.unprepare(function(err){
+								console.log("Record has been updated.");
+								res.json({success:true});
+							});
+						});
+					
+					}
+				});
+			
 		});
 		
 		
@@ -273,7 +320,7 @@ function setRoutes(){
 		var connection = new mssql.Connection(config, function(err) {
 			var ad_account = req.params.name;
 			//basic profile
-			query(connection, "SELECT DISTINCT FIRST_M as firstName, MIDDLE_M as middleName, LAST_M as surName, Sex_C as sex, civil_stat as civilStatus, BIRTH_DATE AS dateOfBirth, BIRTH_PROV AS placeOfBirth,CITIZEN as citizenship,HEIGHT as height,[WEIGHT] as weight,BLOOD_T as bloodType, id_picture as picture, EMP_DTL.EMP_ID as NID,TIN,GSIS_ID_NO as GSIS,PAG_IBIG as PAGIBIG,PH_NO as PHILHEALTH,SSS_NO as SSS,EMAIL as eMail,CEL_NO as cellphone,ADDR_ST+ ', ' +ADDR_MUN+ ', ' +ADDR_PROV as resAdd, ADDR_ZP as resZip, TEL_NO as resTel, PADDR_ST+ ', ' +PADDR_MUN+ ', '+PADDR_PROV as perAdd, PADDR_ZP as perZip, PTEL_NO as perTel,F_FIRST as fatFirstname, F_MIDDLE as fatMiddlename, F_LAST as fatSurname,M_FIRST as motFirstname, M_MIDDLE as motMiddlename, M_LAST as motSurname,S_FIRST as spFirstname, S_MIDDLE as spMiddlename, S_LAST as spSurname,SPOUSE_OCC as spOccu, BUS_NAME as spEmployer, BUS_ADD as spBusAdd, BUS_TEL as spBusTel FROM EMP_DTL LEFT OUTER JOIN plant ON EMP_DTL.EMP_ID = plant.emp_id WHERE plant.AD_ACCOUNT = @param",{param:ad_account}, function(rs){
+			query(connection, "SELECT DISTINCT FIRST_M as firstName, MIDDLE_M as middleName, LAST_M as surName, Sex_C as sex, civil_stat as civilStatus, BIRTH_DATE AS dateOfBirth, BIRTH_PROV AS placeOfBirth,CITIZEN as citizenship,HEIGHT as height,[WEIGHT] as weight,BLOOD_T as bloodType, id_picture as picture, EMP_DTL.EMP_ID as NID,TIN,GSIS_ID_NO as GSIS,PAG_IBIG as PAGIBIG,PH_NO as PHILHEALTH,SSS_NO as SSS,EMAIL as eMail,CEL_NO as cellphone,ADDR_ST+ ', ' +ADDR_MUN+ ', ' +ADDR_PROV as resAdd, ADDR_ZP as resZip, TEL_NO as resTel, PADDR_ST+ ', ' +PADDR_MUN+ ', '+PADDR_PROV as perAdd, PADDR_ZP as perZip, PTEL_NO as perTel,F_FIRST as fatFirstname, F_MIDDLE as fatMiddlename, F_LAST as fatSurname,M_FIRST as motFirstname, M_MIDDLE as motMiddlename, M_LAST as motSurname,S_FIRST as spFirstname, S_MIDDLE as spMiddlename, S_LAST as spSurname,SPOUSE_OCC as spOccu, BUS_NAME as spEmployer, BUS_ADD as spBusAdd, BUS_TEL as spBusTel, CTC_NO as taxNo, CTC_PLACE as issuedAt, CTC_DATE as issuedDate, PDS_ACCOMP as dateAccomplished FROM EMP_DTL LEFT OUTER JOIN plant ON EMP_DTL.EMP_ID = plant.emp_id WHERE plant.AD_ACCOUNT = @param",{param:ad_account}, function(rs){
 				var employee = rs[0];
 				//training
 				query(connection, "SELECT COURSE_M as titleOfSeminar, SPONSOR as conductedBy, DATE_START AS trainingFrom, DATE_END AS trainingTo, HOURS AS numberOfHours FROM plant LEFT OUTER JOIN TRAINEMP ON plant.emp_id = TRAINEMP.EMP_ID WHERE plant.AD_ACCOUNT = @param",{param:ad_account}, function(rs){										
@@ -330,34 +377,6 @@ function setRoutes(){
 				
 			});
 		
-			/* var ps = new mssql.PreparedStatement(connection);
-			var ad_account = req.params.name;
-			ps.input('param', mssql.VarChar(50)); */
-			
-			
-			/* ps.prepare("SELECT FIRST_M as firstName, MIDDLE_M as middleName, LAST_M as surName, BIRTH_DATE AS dateOfBirth, BIRTH_MUN + ', ' + BIRTH_PROV AS placeOfBirth,CITIZEN as citizenship,HEIGHT as height,[WEIGHT] as weight,BLOOD_T as bloodType,EMP_DTL.EMP_ID AS NID,TIN,GSIS_ID_NO as GSIS,PAG_IBIG as PAGIBIG,PH_NO as PHILHEALTH,SSS_NO as SSS,EMAIL as eMail,CEL_NO as cellphone,ADDR_ST+ ' ' +ADDR_MUN+ ' ' +ADDR_PROV as resAdd, ADDR_ZP as resZip, TEL_NO as resTel, PADDR_ST+ ' ' +PADDR_MUN+ ' '+PADDR_PROV as perAdd, PADDR_ZP as perZip, PTEL_NO as perTel FROM EMP_DTL LEFT OUTER JOIN plant8sep2014 ON EMP_DTL.EMP_ID = plant8sep2014.EMP_ID WHERE EMP_DTL.AD_ACCOUNT = @param", function(err) {
-				
-				ps.execute({param: ad_account}, function(err, employees) {
-					var employee = employees[0];
-					employee.trainings = [{'titleOfSeminar':'Basic GIS'}]
-					res.json(employee);
-				});
-			}); */
-			/* ps.prepare("SELECT EXAM_T as titleOfExam, EXAM_PLACE as place, rating FROM EMP_DTL LEFT OUTER JOIN ELIG ON EMP_DTL.EMP_ID = ELIG.EMP_ID WHERE EMP_DTL.AD_ACCOUNT = @param", function(err) {
-				
-				ps.execute({param: NAMRIA}, function(err, eligibility) {
-					console.dir(eligibility);
-					res.json(eligibility);
-				});
-			}); */
-			/* ps.prepare("SELECT COURSE_M as titleOfSeminar, VENUE as conductedBy FROM EMP_DTL LEFT OUTER JOIN TRAINEMP ON EMP_DTL.EMP_ID = TRAINEMP.EMP_ID WHERE EMP_DTL.AD_ACCOUNT = @param", function(err) {
-				
-				ps.execute({param: NAMRIA}, function(err, training) {
-					console.dir(training);
-					res.json(training);
-				});
-			}); */
-			
 		});	
 	});
 	
