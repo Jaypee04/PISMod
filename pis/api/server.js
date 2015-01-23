@@ -87,10 +87,13 @@ function setAuthentication(){
 	}, 
 	
 	function(profile, done){
-		//var email = profile.userPrincipalName;
-		var name = profile.name.givenName+ ' ' + profile.name.familyName;
-		if(name)
+		//var email = profile.userPrincipalName;'
+		
+		
+		
+		if(profile)
 			{
+				var name = profile.name.givenName+ ' ' + profile.name.familyName;
 				done(null, name);
 				
 			}
@@ -146,6 +149,14 @@ function setAuthentication(){
 
 //Function that set the routes
 function setRoutes(){
+	//database configuration
+	var config = {
+		user: 'pis',
+		password: 'pis',
+		server: '192.168.8.16', 
+		database: 'PIS'
+	}
+	
 	// test routes
 	app.get('/test', function(req, res){
 		var profPic = 'Hello! It\'s functioning';
@@ -153,24 +164,25 @@ function setRoutes(){
 		
 	});
 	
-	app.post('/testUpdate', function(req, res){
-		var config = {
-			user: 'pis',
-			password: 'pis',
-			server: 'localhost\\sqlexpress', 
-			database: 'PIS'
-			
-		}
+	app.get('/getDegreeCourse',function(req,res){
 		
+		
+		res.json([{degreeCode:'12',degreeType:'B.S.'}]);
+		
+	});
+	
+	app.post('/testUpdate', function(req, res){
+				
 		var connection = new mssql.Connection(config, function(err) {
 			var ps = new mssql.PreparedStatement(connection);
-			/* ps.input('DoB', mssql.Date);
+			ps.input('DoB', mssql.Date);
 			ps.input('IDP', mssql.VarChar(mssql.MAX));
 			ps.input('PoB', mssql.VarChar(50));
 			ps.input('sex', mssql.VarChar(2));
 			ps.input('civilStatus', mssql.VarChar(50));
 			ps.input('height', mssql.Decimal(18, 2));
 			ps.input('weight', mssql.Decimal(18,2));
+			ps.input('citizenship', mssql.VarChar(50));
 			ps.input('bloodType', mssql.VarChar(50));
 			ps.input('NamriaID', mssql.VarChar(50));
 			ps.input('tin', mssql.VarChar(50));
@@ -208,7 +220,7 @@ function setRoutes(){
 			ps.input('tax_date', mssql.Date);
 			ps.input('date_accomplished', mssql.Date);
 			
-			ps.prepare("UPDATE EMP_DTL SET birth_date=@DoB, birth_prov=@PoB, sex_c=@sex, civil_stat=@civilStatus, height=@height, weight=@weight, blood_t=@bloodType, tin=@tin, gsis_id_no=@GSIS, pag_ibig=@PAGIBIG, ph_no=@PHILHEALTH, sss_no=@SSS, cel_no=@cellphone, email=@eMail, addr_st=@residentialSt, addr_mun=@residentialMun, addr_prov=@residentialProv, tel_no=@residentialTel, addr_zp=@residentialZip, paddr_st=@provincialSt, paddr_mun=@provincialMun,paddr_prov=@provincialProv,ptel_no=@provincialTel,paddr_zp=@provincialZip, s_first=@spouse_f,s_middle=@spouse_m,s_last=@spouse_l,spouse_occ=@spouse_occu,bus_name=@spouse_empl,bus_add=@spouse_emplAdd,bus_tel=@spouse_emplTel, f_first=@father_f,f_middle=@father_m,f_last=@father_l,m_first=@mother_f,m_middle=@mother_m,m_last=@mother_l, ctc_no=@tax_no, ctc_place=@tax_place, ctc_date=@tax_date,pds_accomp=@date_accomplished where emp_id=@NamriaID", function(err) {
+			ps.prepare("UPDATE EMP_DTL SET birth_date=@DoB, birth_prov=@PoB, sex_c=@sex, civil_stat=@civilStatus, height=@height, weight=@weight, blood_t=@bloodType, citizen=@citizenship, tin=@tin, gsis_id_no=@GSIS, pag_ibig=@PAGIBIG, ph_no=@PHILHEALTH, sss_no=@SSS, cel_no=@cellphone, email=@eMail, addr_st=@residentialSt, addr_mun=@residentialMun, addr_prov=@residentialProv, tel_no=@residentialTel, addr_zp=@residentialZip, paddr_st=@provincialSt, paddr_mun=@provincialMun,paddr_prov=@provincialProv,ptel_no=@provincialTel,paddr_zp=@provincialZip, s_first=@spouse_f,s_middle=@spouse_m,s_last=@spouse_l,spouse_occ=@spouse_occu,bus_name=@spouse_empl,bus_add=@spouse_emplAdd,bus_tel=@spouse_emplTel, f_first=@father_f,f_middle=@father_m,f_last=@father_l,m_first=@mother_f,m_middle=@mother_m,m_last=@mother_l, ctc_no=@tax_no, ctc_place=@tax_place, ctc_date=@tax_date,pds_accomp=@date_accomplished where emp_id=@NamriaID", function(err) {
 				//console.log(err);
 				var p = req.body.personnelInfo;
 				var dOB = new Date(p.dateOfBirth);
@@ -223,7 +235,7 @@ function setRoutes(){
 				var provMun = p_address[1]; 
 				var provProv = p_address[2];
 				
-				ps.execute({DoB:dOB,PoB:p.placeOfBirth, sex:p.sex, civilStatus:p.civilStatus, height:p.height, weight:p.weight, bloodType:p.bloodType, tin:p.TIN, GSIS:p.GSIS, PAGIBIG:p.PAGIBIG, PHILHEALTH:p.PHILHEALTH, SSS:p.SSS, cellphone:p.cellphone, eMail:p.eMail, residentialSt:resSt,residentialMun:resMun,residentialProv:resProv,residentialTel:p.resTel,residentialZip:p.resZip, provincialSt:provSt,provincialMun:provMun,provincialProv:provProv,provincialTel:p.perTel,provincialZip:p.perZip,spouse_f:p.spFirstname,spouse_m:p.spMiddlename,spouse_l:p.spSurname,spouse_occu:p.spOccu,spouse_empl:p.spEmployer,spouse_emplAdd:p.spBusAdd,spouse_emplTel:p.spBusTel, father_f:p.fatFirstname,father_m:p.fatMiddlename,father_l:p.fatSurname, mother_f:p.motFirstname,mother_m:p.motMiddlename,mother_l:p.motSurname, tax_no:p.taxNo,tax_place:p.issuedAt,tax_date:taxdate,date_accomplished:dateaccomplished, NamriaID:p.NID}, function(err, recordset) {
+				ps.execute({DoB:dOB,PoB:p.placeOfBirth, sex:p.sex, civilStatus:p.civilStatus, height:p.height, weight:p.weight, bloodType:p.bloodType, citizenship:p.citizenship, tin:p.TIN, GSIS:p.GSIS, PAGIBIG:p.PAGIBIG, PHILHEALTH:p.PHILHEALTH, SSS:p.SSS, cellphone:p.cellphone, eMail:p.eMail, residentialSt:resSt,residentialMun:resMun,residentialProv:resProv,residentialTel:p.resTel,residentialZip:p.resZip, provincialSt:provSt,provincialMun:provMun,provincialProv:provProv,provincialTel:p.perTel,provincialZip:p.perZip,spouse_f:p.spFirstname,spouse_m:p.spMiddlename,spouse_l:p.spSurname,spouse_occu:p.spOccu,spouse_empl:p.spEmployer,spouse_emplAdd:p.spBusAdd,spouse_emplTel:p.spBusTel, father_f:p.fatFirstname,father_m:p.fatMiddlename,father_l:p.fatSurname, mother_f:p.motFirstname,mother_m:p.motMiddlename,mother_l:p.motSurname, tax_no:p.taxNo,tax_place:p.issuedAt,tax_date:taxdate,date_accomplished:dateaccomplished, NamriaID:p.NID}, function(err, recordset) {
 					//console.dir(err);
 					
 			
@@ -232,7 +244,7 @@ function setRoutes(){
 						res.json({success:true});
 					});
 				});
-			}); */
+			});
 			/*
 			for(var i=0;i<p.eligibility.length;i++)
 				{
@@ -242,11 +254,13 @@ function setRoutes(){
 			*/
 			
 			//Update Eligibility
-			var p = req.body.personnelInfo;
+			/* var p = req.body.personnelInfo;
 			ps.input('careerTitle', mssql.NVarChar(35));
 			ps.input('careerRating', mssql.Decimal(18, 2));
 			ps.input('careerPlace', mssql.NVarChar(30));
 			ps.input('NamriaID', mssql.VarChar(50));
+			ps.input('licenseNumber', mssql.NVarChar(30));
+			ps.input('dateOfRelease', mssql.Date);
 			
 				
 				ps.prepare("INSERT INTO ELIG (EMP_ID,EXAM_T,[RATING], EXAM_PLACE) VALUES (@NamriaID,@careerTitle,@careerRating,@careerPlace)", function(err){
@@ -259,12 +273,10 @@ function setRoutes(){
 						//var CseDateDay = cseDate[1];
 						//var CseDateYear = cseDate[2];
 						var CsePlace = e.eligPlace;
-						//var CseNumber = e.eligLicenseNumber;
-						//var CseDor = e.eligDateOfRelease;
+						var CseNumber = e.eligLicenseNumber;
+						var CseDor = new Date(e.eligDateOfRelease);
 					
-					
-					
-						ps.execute({careerTitle:CseCareer, careerRating:CseRating, careerPlace:CsePlace, NamriaID:p.NID},function(err, recordset){
+						ps.execute({careerTitle:CseCareer, careerRating:CseRating, careerPlace:CsePlace, dateOfRelease:CseDor ,NamriaID:p.NID},function(err, recordset){
 							ps.unprepare(function(err){
 								console.log("Record has been updated.");
 								res.json({success:true});
@@ -273,21 +285,14 @@ function setRoutes(){
 					
 					}
 				});
-			
+			 */
 		});
 		
 		
 	});
 	
 	app.get('/connect', function(req, res){
-		var config = {
-			user: 'pis',
-			password: 'pis',
-			server: 'localhost\\sqlexpress', 
-			database: 'PIS'
-			
-		}
-
+		
 		var connection = new mssql.Connection(config, function(err) {
 			// ... error checks
 
@@ -308,14 +313,6 @@ function setRoutes(){
 	
 	// read a record using NAMRIA ID
 	app.get('/employees/:name', function(req, res){
-		
-		var config = {
-			user: 'pis',
-			password: 'pis',
-			server: 'localhost\\sqlexpress', 
-			database: 'PIS'
-			
-		}
 		
 		var connection = new mssql.Connection(config, function(err) {
 			var ad_account = req.params.name;
@@ -355,14 +352,14 @@ function setRoutes(){
 												employee.organization = rs;
 											
 												//others
-												query(connection, "SELECT [deg_3] as [national],[deg_4] as [local],[deg_3r] as nationalRemarks,[deg_4r] as localRemarks,[charged] as charged,[charged_r] as chargedRemarks,[admin] as offense,[admin_r] as offenseRemarks,[crime] as violation,[crime_r] as violationRemarks,[retire] as separated,[retire_r] as separatedRemarks,[elect] as candidate,[elect_r] as candidateRemarks,[ind_g] as indigenous,[ind_r] as indigenousRemarks,[dif_a] as [abled],[dif_r] as abledRemarks,[solo],[solo_r] as soloRemarks FROM plant LEFT OUTER JOIN chk_list ON plant.EMP_ID = chk_list.EMP_ID WHERE plant.AD_ACCOUNT = @param",{param:ad_account}, function(rs){
-													employee.others = rs;
+												query(connection, "SELECT [deg_3] as [national],[deg_4] as [local],[deg_3r] as nationalRemarks,[deg_4r] as localRemarks,[charged] as [charged],[charged_r] as chargedRemarks,[admin] as [offense],[admin_r] as offenseRemarks,[crime] as [violation],[crime_r] as violationRemarks,[retire] as [separated],[retire_r] as separatedRemarks,[elect] as [candidate],[elect_r] as candidateRemarks,[ind_g] as [indigenous],[ind_r] as indigenousRemarks,[dif_a] as [abled],[dif_r] as abledRemarks,[solo],[solo_r] as soloRemarks FROM plant LEFT OUTER JOIN chk_list ON plant.EMP_ID = chk_list.EMP_ID WHERE plant.AD_ACCOUNT = @param",{param:ad_account}, function(rs){
+													employee.others = rs[0];
 												
 													//reference
 													query(connection, "SELECT REFNAME as cName,REF_ADDR + ', ' + REF_MUN + ', ' + REF_PROV as cAdd, TEL_NO as cNum FROM plant LEFT OUTER JOIN REF ON plant.emp_id = REF.EMP_ID WHERE plant.AD_ACCOUNT = @param",{param:ad_account}, function(rs){
 														employee.charReference = rs;
 														res.json(employee);
-														//console.log(rs);
+														
 													});
 												});
 											});
@@ -386,7 +383,7 @@ function setRoutes(){
 		ps.prepare(sql, function(err){
 			
 			ps.execute(param, function(err, rs) {
-				//console.log('x',err,rs);
+				console.log(err,rs);
 				callback(rs);
 			});
 		});
